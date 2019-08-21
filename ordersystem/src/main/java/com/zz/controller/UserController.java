@@ -42,15 +42,30 @@ public class UserController {
     public Object save(@RequestBody User user) {
         User user1 = new User();
         Md5Util md5 = new Md5Util();
-        user1.setId(KeyUtils.genUniqueKey());
-        user1.setUsername(md5.StringInMd5(user.getUsername()));
+        user1.setId(md5.StringInMd5(KeyUtils.genUniqueKey()));
+        user1.setUsername(user.getUsername());
         user1.setPassword(md5.StringInMd5(user.getPassword()));
-        user1.setEmail(md5.StringInMd5(user.getEmail()));
+        user1.setEmail(user.getEmail());
         if (us.save(user1) != null) {
             return "success";
         } else {
             return "fail";
         }
+    }
+
+    @RequestMapping("update/{username}")
+    public Map update(@RequestBody User user,@PathVariable("username") String username){
+        User user1 = new User();
+        Map map=new HashMap();
+        List<User> users=us.findByUserName(username);
+        user1.setId(users.get(0).getId());
+        user1.setUsername(user.getUsername());
+        user1.setPassword(users.get(0).getPassword());
+        user1.setEmail(user.getEmail());
+        if(us.save(user1)!=null){
+            map.put("result","success");
+        }
+        return map;
     }
 
     /**
@@ -63,7 +78,7 @@ public class UserController {
     @ResponseBody
     public Map checkName(@PathVariable("username") String username) {
         Md5Util md5 = new Md5Util();
-        String name = md5.StringInMd5(username);//md5加密
+        String name = username;//md5加密
         List<User> user = us.findByUserName(name);
         boolean result = false;
         if (user.size() > 0) {
@@ -84,7 +99,7 @@ public class UserController {
     @ResponseBody
     public Map checkEmail(@PathVariable("email") String email) {
         Md5Util md5 = new Md5Util();
-        String emailcode = md5.StringInMd5(email);//md5加密
+        String emailcode = email;//md5加密
         List<User> user = us.findByEmail(emailcode);
         boolean result = false;
         if (user.size() > 0) {
@@ -94,6 +109,34 @@ public class UserController {
         map.put("result", result);
         return map;
     }
+
+    /**
+     * 查询邮箱
+     * @param username
+     * @return
+     */
+    @RequestMapping("getEmail/{username}")
+    public Map getEmail(@PathVariable("username") String username){
+        List<User> user = us.findByUserName(username);
+        Map map=new HashMap();
+        System.out.println(user.get(0).getEmail());
+        if(user.size()>0){
+            map.put("email",user.get(0).getEmail());
+        }
+        return map;
+    }
+
+    @RequestMapping("getId/{username}")
+    public Map getId(@PathVariable("username") String username){
+        List<User> user = us.findByUserName(username);
+        Map map=new HashMap();
+        System.out.println(user.get(0).getId());
+        if(user.size()>0){
+            map.put("id",user.get(0).getId());
+        }
+        return map;
+    }
+
 
     /**
      * 登录，使用cookie存放登陆用户名
@@ -111,7 +154,7 @@ public class UserController {
         String loginUsername = request.getParameter("username");
         String loginPassword = request.getParameter("password");
 //        us.addCookie(loginUsername, response, request);
-        User user = us.findByUserNameAndPassword(md5.StringInMd5(loginUsername), md5.StringInMd5(loginPassword));
+        User user = us.findByUserNameAndPassword(loginUsername, md5.StringInMd5(loginPassword));
         if (user != null) {
 //            Map rsmap = ts.operateToKen(user,user.getId());
 //            System.out.println(rsmap);
@@ -124,6 +167,23 @@ public class UserController {
         return map;
     }
 
+    @RequestMapping("setCookie")
+    public Map setCookie(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map map = new HashMap();
+        Md5Util md5 = new Md5Util();
+        //添加 Cookie
+        String loginUsername = request.getParameter("username");
+//        us.addCookie(loginUsername, response, request);
+        List<User> user = us.findByUserName(loginUsername);
+        if (user.size()>0) {
+            us.addCookie(loginUsername, response, request);
+            map.put("result", "success");
+        } else {
+            map.put("result", "fail");
+        }
+
+        return map;
+    }
 
     /**
      *     	 * 获取 Cookie中的信息

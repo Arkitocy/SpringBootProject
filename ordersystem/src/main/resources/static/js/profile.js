@@ -1,6 +1,7 @@
 $(document).ready(function () {
     addressInit('cmbProvince', 'cmbCity', 'cmbArea');
 
+    //base64加密 向后端传输的数据统一使用 base.encode()加密 后端传来的数据使用base.decode()解密
     function Base64() {
         // private property
         _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -100,6 +101,8 @@ $(document).ready(function () {
     }
 
     var base = new Base64();
+    var username;
+    //页面刷新时从cookie中取出username
     $.ajax({
         type: "POST",
         url: "user/getCookie",
@@ -109,17 +112,28 @@ $(document).ready(function () {
             if (loginUsername == "") {
                 self.location = "login.html";
             }
-            console.log(data);
-            console.log(loginUsername);
             $("#loginusername").text(loginUsername);
+            username = loginUsername;
+            $("#username").attr("value", username);
+            $("#username").text(username);
+            //根据username查找邮箱
+            $.ajax({
+                type: "POST",
+                url: "user/getEmail/" + data.loginUsername,
+                dataType: "json",
+                success: function (json) {
+                    var email = base.decode(json.email);
+                    console.log(email);
+                    $("#email").attr("value", email);
+                }
+            })
         },
         error: function () {
             alert("cookies 信息获取失败！");
         }
-
-
     })
 
+    //注销
     $("#logoutbtn").click(function () {
         $.ajax({
             type: "POST",
@@ -131,14 +145,123 @@ $(document).ready(function () {
             }
         })
     })
-
+    //进入profile页面
     $("#profilebtn").click(function () {
         self.location = "profile.html";
     })
 
-
-
+    //新建收货地址
     $("#saveaddressmodalbtn").click(function () {
         $("#saveaddressmodal").modal("show");
+        $("#phone").blur(function () {
+            if (!(/^1[3456789]\d{9}$/.test($("#phone").val()))) {
+                $("#phonep").show();
+            } else {
+                $("#phonep").hide();
+            }
+        });
+        $("#savenewaddressbtn").click(function () {
+            var mainaddress = $("#cmbProvince").val() + " " + $("#cmbCity").val() + " " + $("#cmbArea").val();
+            var userid //依据上面的username去user表找id
+            var detailaddress = $("#detailaddress").val();
+            var phone = $("#phone").val();
+            if (userid == null || detailaddress == null || !(/^1[3456789]\d{9}$/.test(phone)) || mainaddress == null) {
+                alert("请填写完整信息");
+            } else {
+                //用.ajax方法将数据存入数据库中，返回map对象然后重新刷新页面
+                console.log(mainaddress);
+                console.log(detailaddress);
+                console.log(phone);
+                console.log(username);
+            }
+        })
+    })
+    //判断用户名是否合格
+    $("#username").blur(function () {
+        var name = $("#username").val();
+        if (this.value.length == 0) {
+            $("#namepp").show();
+            $("#saveallbtn").attr('disabled', true);
+        } else if (name.length > 0) {
+            $("#namepp").hide();
+            $("#saveallbtn").attr('disabled', false);
+        }
+        if (/^[0-9a-zA-Z_]{1,30}$/.test(name)) {
+            $("#namep").hide();
+            $("#saveallbtn").attr('disabled', false);
+        } else if (name.length > 30) {
+            $("#namep").show();
+            $("#saveallbtn").attr('disabled', true);
+        }
+        var username = base.encode(name);
+        $.getJSON("user/checkName/" + username, function (json) {
+            var rs = json.result + "";
+            console.log(rs);
+            if (rs == 'false') {
+                $("#nameppp").hide();
+                $("#saveallbtn").attr('disabled', false);
+            } else {
+                $("#nameppp").show();
+                $("#saveallbtn").attr('disabled', true);
+            }
+        });
+    });
+    //判断邮箱是否合格
+    $("#email").blur(function () {
+        var email = $("#email").val();
+        var checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (checkEmail.test(email)) {
+            $("#emailp").hide();
+            $("#saveallbtn").attr('disabled', false);
+        } else {
+            $("#emailp").show();
+            $("#saveallbtn").attr('disabled', true);
+        }
+        var emailcode = base.encode(email);
+        $.getJSON("user/checkEmail/" + emailcode, function (json) {
+            var rs = json.result + "";
+            if (rs == 'false') {
+                $("#emailpp").hide();
+                $("#saveallbtn").attr('disabled', false);
+            } else {
+                $("#emailpp").show();
+                $("#saveallbtn").attr('disabled', true);
+            }
+        });
+
+    })
+    //保存用户名以及邮箱
+    $("#saveallbtn").click(function () {
+        var id;
+        console.log(username);
+        var uname = base.encode($("#username").val());
+        var uemail = base.encode($("#email").val());
+        console.log(uname);
+        console.log(uemail);
+        var adata = {
+            "username": uname,
+            "email": uemail
+        };
+        var data = JSON.stringify(adata);
+        $.ajax({
+            type: "POST",
+            url: "user/update/" + base.encode(username),
+            contentType: "application/json",
+            data: data,
+            success: function (res) {
+                console.log(res.result);
+                //设置cookie
+                $.getJSON("user/setCookie", {"username": uname},
+                    function (json) {
+                        if(json.result=="success"){
+                            self.location = "profile.html";
+                        }else {
+                            alert("添加cookie失败")
+                            self.location = "profile.html";
+                        }
+
+                    });
+            }
+        })
     })
 })

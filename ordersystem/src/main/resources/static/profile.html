@@ -173,14 +173,19 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 form-control-label">用户名</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control">
+                                                <input type="text" class="form-control" id="username">
+                                                <p style="color:red;display: none" id="namep">用户名过长</p>
+                                                <p style="color:red;display: none" id="namepp">用户名不为空</p>
+                                                <p style="color:red;display: none" id="nameppp">此用户名已被注册</p>
                                             </div>
                                         </div>
                                         <div class="line"></div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 form-control-label">邮箱</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control">
+                                                <input type="text" class="form-control" id="email">
+                                                <p style="color:red;display: none" id="emailp">请输入正确邮箱格式</p>
+                                                <p style="color:red;display: none" id="emailpp">此邮箱已被注册</p>
                                                 <small class="help-block-none">
                                                 </small>
                                             </div>
@@ -246,6 +251,7 @@
                                                                                    class="label-material">联系电话</label>
                                                                             <input id="phone" type="text" name="phone"
                                                                                    required class="input-material">
+                                                                            <p style="color:red;display: none" id="phonep" >请输入正确的电话号码</p>
                                                                         </div>
                                                                         <div class="form-group-material">
                                                                             <label for="cmbProvince"
@@ -295,7 +301,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-7 offset-sm-5">
-                                                <button type="button" class="btn btn-primary">保存</button>
+                                                <button type="button" class="btn btn-primary" id="saveallbtn">保存</button>
                                                 <button type="button" class="btn btn-secondary">取消</button>
                                             </div>
                                         </div>
