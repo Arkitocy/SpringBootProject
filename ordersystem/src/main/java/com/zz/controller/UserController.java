@@ -32,7 +32,12 @@ public class UserController {
     @Resource
     TokenService ts;
 
-
+    /**
+     * 注册方法
+     *
+     * @param user
+     * @return
+     */
     @RequestMapping("register")
     public Object save(@RequestBody User user) {
         User user1 = new User();
@@ -48,11 +53,17 @@ public class UserController {
         }
     }
 
+    /**
+     * 比较是否有重名
+     *
+     * @param username
+     * @return
+     */
     @RequestMapping("checkName/{username}")
     @ResponseBody
     public Map checkName(@PathVariable("username") String username) {
         Md5Util md5 = new Md5Util();
-        String name = md5.StringInMd5(username);
+        String name = md5.StringInMd5(username);//md5加密
         List<User> user = us.findByUserName(name);
         boolean result = false;
         if (user.size() > 0) {
@@ -63,12 +74,17 @@ public class UserController {
         return map;
     }
 
-
+    /**
+     * 检查邮箱
+     *
+     * @param email
+     * @return
+     */
     @RequestMapping("checkEmail/{email}")
     @ResponseBody
     public Map checkEmail(@PathVariable("email") String email) {
         Md5Util md5 = new Md5Util();
-        String emailcode = md5.StringInMd5(email);
+        String emailcode = md5.StringInMd5(email);//md5加密
         List<User> user = us.findByEmail(emailcode);
         boolean result = false;
         if (user.size() > 0) {
@@ -79,7 +95,14 @@ public class UserController {
         return map;
     }
 
-
+    /**
+     * 登录，使用cookie存放登陆用户名
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("login")
     public Map loginValidate(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map map = new HashMap();
@@ -87,12 +110,12 @@ public class UserController {
         //添加 Cookie
         String loginUsername = request.getParameter("username");
         String loginPassword = request.getParameter("password");
-        us.addCookie(loginUsername, loginPassword, response, request);
+//        us.addCookie(loginUsername, response, request);
         User user = us.findByUserNameAndPassword(md5.StringInMd5(loginUsername), md5.StringInMd5(loginPassword));
         if (user != null) {
 //            Map rsmap = ts.operateToKen(user,user.getId());
 //            System.out.println(rsmap);
-            us.addCookie(loginUsername, loginPassword, response, request);
+            us.addCookie(loginUsername, response, request);
             map.put("result", "index.html");
         } else {
             map.put("result", "login.html");
@@ -132,14 +155,22 @@ public class UserController {
         return gson.toJson(cookie);
     }
 
+    /**
+     * 登出清除cookie
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("logoutCookie")
     @ResponseBody
     public Map logoutCookie(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map map = new HashMap();
-        Cookie loginUsernameCookie = new Cookie("loginUsername", null);
-        loginUsernameCookie.setMaxAge(0);
+        Cookie loginUsernameCookie = new Cookie("loginUsername", null);//新建一个cookie
+        loginUsernameCookie.setMaxAge(0);//设置生命为0 即清除
         loginUsernameCookie.setPath("/");
-        response.addCookie(loginUsernameCookie);
+        response.addCookie(loginUsernameCookie);//覆盖原有cookie
         map.put("result", "success");
         return map;
     }
