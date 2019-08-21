@@ -128,4 +128,8 @@ $(document).ready(function () {
             }
         })
     })
+
+    $("#profilebtn").click(function () {
+        self.location="profile.html";
+    })
 })

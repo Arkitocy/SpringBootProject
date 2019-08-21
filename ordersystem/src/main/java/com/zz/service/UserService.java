@@ -64,8 +64,6 @@ public class UserService {
             }
             //加入Cookie到响应头
             response.addCookie(loginUsernameCookie);
-
         }
     }
-
 }

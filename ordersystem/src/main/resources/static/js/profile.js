@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    addressInit('cmbProvince', 'cmbCity', 'cmbArea');
+
     function Base64() {
         // private property
         _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -96,15 +98,16 @@ $(document).ready(function () {
             return string;
         }
     }
+
     var base = new Base64();
     $.ajax({
         type: "POST",
         url: "user/getCookie",
         dataType: "json",
         success: function (data) {
-            var loginUsername =base.decode(data.loginUsername)
-            if(loginUsername==""){
-                self.location="login.html";
+            var loginUsername = base.decode(data.loginUsername)
+            if (loginUsername == "") {
+                self.location = "login.html";
             }
             console.log(data);
             console.log(loginUsername);
@@ -116,20 +119,26 @@ $(document).ready(function () {
 
 
     })
-    
+
     $("#logoutbtn").click(function () {
         $.ajax({
             type: "POST",
             url: "user/logoutCookie",
             dataType: "json",
-            success:function (data) {
+            success: function (data) {
                 console.log(data);
-                self.location="login.html";
+                self.location = "login.html";
             }
         })
     })
 
     $("#profilebtn").click(function () {
-        self.location="profile.html";
+        self.location = "profile.html";
+    })
+
+
+
+    $("#saveaddressmodalbtn").click(function () {
+        $("#saveaddressmodal").modal("show");
     })
 })
