@@ -103,7 +103,7 @@
         <nav class="side-navbar">
             <!-- Sidebar Header-->
             <div class="sidebar-header d-flex align-items-center" id="profilebtn">
-                <div class="avatar"><img src="img/defaultimg.jpg" alt="..." class="img-fluid rounded-circle"></div>
+                <div class="avatar"><img src="" alt="..." class="img-fluid rounded-circle" id="headimg1"></div>
                 <div class="title">
                     <h1 class="h4" id="loginusername"></h1>
                 </div>
@@ -170,6 +170,11 @@
                                 </div>
                                 <div class="card-body">
                                     <form class="form-horizontal">
+
+                                        <div class="col-sm-7 offset-sm-5">
+                                            <img src="" class="img-fluid rounded-circle" width="120"
+                                                 id="headimg2"/>
+                                        </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 form-control-label">用户名</label>
                                             <div class="col-sm-9">
@@ -222,90 +227,131 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="modal fade" id="saveaddressmodal">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
 
-                                                            <!-- 模态框头部 -->
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">新增收货地址</h4>
-                                                                <button type="button" class="close"
-                                                                        data-dismiss="modal">&times;
-                                                                </button>
-                                                            </div>
-
-                                                            <!-- 模态框主体 -->
-                                                            <div class="modal-body">
-                                                                <div class="row">
-                                                                    <label class="col-sm-3 form-control-label">新增收货地址</label>
-                                                                    <div class="col-sm-9">
-                                                                        <div class="form-group-material">
-                                                                            <label for="receiver"
-                                                                                   class="label-material">收货人</label>
-                                                                            <input id="receiver" type="text"
-                                                                                   name="receiver"
-                                                                                   required class="input-material">
-                                                                        </div>
-                                                                        <div class="form-group-material">
-                                                                            <label for="receiver"
-                                                                                   class="label-material">联系电话</label>
-                                                                            <input id="phone" type="text" name="phone"
-                                                                                   required class="input-material">
-                                                                            <p style="color:red;display: none" id="phonep" >请输入正确的电话号码</p>
-                                                                        </div>
-                                                                        <div class="form-group-material">
-                                                                            <label for="cmbProvince"
-                                                                                   class="label-material">省</label>
-                                                                            <select class="form-control"
-                                                                                    id="cmbProvince"
-                                                                                    name="cmbProvince"></select>
-                                                                        </div>
-                                                                        <div class="form-group-material">
-                                                                            <label for="cmbCity" class="label-material">市
-                                                                            </label>
-                                                                            <select class="form-control" id="cmbCity"
-                                                                                    name="cmbCity"></select>
-                                                                        </div>
-                                                                        <div class="form-group-material">
-                                                                            <label for="cmbArea" class="label-material">区 </label>
-                                                                            <select class="form-control" id="cmbArea"
-                                                                                    name="cmbArea"></select>
-                                                                        </div>
-                                                                        <div class="form-group-material">
-                                                                            <label for="detailaddress"
-                                                                                   class="label-material">详细地址</label>
-                                                                            <input id="detailaddress" type="text"
-                                                                                   name="detailaddress"
-                                                                                   required class="input-material">
-                                                                        </div>
-                                                                        <div class="col-sm-4 offset-sm-3">
-                                                                            <button type="button"
-                                                                                    class="btn btn-primary"
-                                                                                    id="savenewaddressbtn">保存
-                                                                            </button>
-                                                                            <button type="button"
-                                                                                    class="btn btn-secondary"
-                                                                                    data-dismiss="modal">取消
-                                                                            </button>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-7 offset-sm-5">
-                                                <button type="button" class="btn btn-primary" id="saveallbtn">保存</button>
+                                                <button type="button" class="btn btn-primary" id="saveallbtn">保存
+                                                </button>
                                                 <button type="button" class="btn btn-secondary">取消</button>
                                             </div>
                                         </div>
+
                                     </form>
+                                    <div class="modal fade" id="saveaddressmodal">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+
+                                                <!-- 模态框头部 -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">新增收货地址</h4>
+                                                    <button type="button" class="close"
+                                                            data-dismiss="modal">&times;
+                                                    </button>
+                                                </div>
+
+                                                <!-- 模态框主体 -->
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <label class="col-sm-3 form-control-label">新增收货地址</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="form-group-material">
+                                                                <label for="receiver"
+                                                                       class="label-material">收货人</label>
+                                                                <input id="receiver" type="text"
+                                                                       name="receiver"
+                                                                       required class="input-material">
+                                                            </div>
+                                                            <div class="form-group-material">
+                                                                <label for="receiver"
+                                                                       class="label-material">联系电话</label>
+                                                                <input id="phone" type="text" name="phone"
+                                                                       required class="input-material">
+                                                                <p style="color:red;display: none"
+                                                                   id="phonep">请输入正确的电话号码</p>
+                                                            </div>
+                                                            <div class="form-group-material">
+                                                                <label for="cmbProvince"
+                                                                       class="label-material">省</label>
+                                                                <select class="form-control"
+                                                                        id="cmbProvince"
+                                                                        name="cmbProvince"></select>
+                                                            </div>
+                                                            <div class="form-group-material">
+                                                                <label for="cmbCity" class="label-material">市
+                                                                </label>
+                                                                <select class="form-control" id="cmbCity"
+                                                                        name="cmbCity"></select>
+                                                            </div>
+                                                            <div class="form-group-material">
+                                                                <label for="cmbArea" class="label-material">区 </label>
+                                                                <select class="form-control" id="cmbArea"
+                                                                        name="cmbArea"></select>
+                                                            </div>
+                                                            <div class="form-group-material">
+                                                                <label for="detailaddress"
+                                                                       class="label-material">详细地址</label>
+                                                                <input id="detailaddress" type="text"
+                                                                       name="detailaddress"
+                                                                       required class="input-material">
+                                                            </div>
+                                                            <div class="col-sm-4 offset-sm-3">
+                                                                <button type="button"
+                                                                        class="btn btn-primary"
+                                                                        id="savenewaddressbtn">保存
+                                                                </button>
+                                                                <button type="button"
+                                                                        class="btn btn-secondary"
+                                                                        data-dismiss="modal">取消
+                                                                </button>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="uploadmodal">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+
+                                                <!-- 模态框头部 -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">上传头像</h4>
+                                                    <button type="button" class="close"
+                                                            data-dismiss="modal">&times;
+                                                    </button>
+                                                </div>
+
+                                                <!-- 模态框主体 -->
+                                                <div class="modal-body">
+                                                    <form id="upload-form" method="post" enctype="multipart/form-data">
+                                                        <input type="file" name="myFile"/>
+                                                        <input type="hidden" id="userid" name="uid">
+
+                                                        <div class="mt-3">
+                                                            <button type="button" class="btn btn-primary"
+                                                                    id="uploadbtn2" name="uploadbtn2">上传作业
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                                <!-- 模态框底部 -->
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">关闭
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

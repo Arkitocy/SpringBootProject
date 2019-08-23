@@ -12,12 +12,14 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String headimgid;
 
-    public User(String id, String username, String password, String email) {
+    public User(String id, String username, String password, String email, String headimgid) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.headimgid = headimgid;
     }
 
 
@@ -55,5 +57,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getHeadimgid() {
+        return headimgid;
+    }
+
+    public void setHeadimgid(String headimgid) {
+        this.headimgid = headimgid;
     }
 }

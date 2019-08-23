@@ -109,6 +109,15 @@ $(document).ready(function () {
             console.log(data);
             console.log(loginUsername);
             $("#loginusername").text(loginUsername);
+            $.ajax({
+                type: "POST",
+                url: "user/getHeadImg/" + data.loginUsername,
+                dataType: "json",
+                success: function (json2) {
+                    var headimgid = json2.headimgid;
+                    $("#headimg1").attr("src", "image/" + headimgid);
+                }
+            });
         },
         error: function () {
             alert("cookies 信息获取失败！");
@@ -116,6 +125,7 @@ $(document).ready(function () {
 
 
     })
+
     
     $("#logoutbtn").click(function () {
         $.ajax({

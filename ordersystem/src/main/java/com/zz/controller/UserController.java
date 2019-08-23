@@ -8,18 +8,18 @@ import com.zz.service.UserService;
 
 import com.zz.utils.KeyUtils;
 import com.zz.utils.Md5Util;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 
 @RestController
@@ -31,6 +31,8 @@ public class UserController {
     UserService us;
     @Resource
     TokenService ts;
+    @Value("${fileUpLoadPath}")
+    String filepath;
 
     /**
      * 注册方法
@@ -46,6 +48,7 @@ public class UserController {
         user1.setUsername(user.getUsername());
         user1.setPassword(md5.StringInMd5(user.getPassword()));
         user1.setEmail(user.getEmail());
+        user1.setHeadimgid(user.getHeadimgid());
         if (us.save(user1) != null) {
             return "success";
         } else {
@@ -54,16 +57,16 @@ public class UserController {
     }
 
     @RequestMapping("update/{username}")
-    public Map update(@RequestBody User user,@PathVariable("username") String username){
+    public Map update(@RequestBody User user, @PathVariable("username") String username) {
         User user1 = new User();
-        Map map=new HashMap();
-        List<User> users=us.findByUserName(username);
+        Map map = new HashMap();
+        List<User> users = us.findByUserName(username);
         user1.setId(users.get(0).getId());
         user1.setUsername(user.getUsername());
         user1.setPassword(users.get(0).getPassword());
         user1.setEmail(user.getEmail());
-        if(us.save(user1)!=null){
-            map.put("result","success");
+        if (us.save(user1) != null) {
+            map.put("result", "success");
         }
         return map;
     }
@@ -112,30 +115,92 @@ public class UserController {
 
     /**
      * 查询邮箱
+     *
      * @param username
      * @return
      */
     @RequestMapping("getEmail/{username}")
-    public Map getEmail(@PathVariable("username") String username){
+    public Map getEmail(@PathVariable("username") String username) {
         List<User> user = us.findByUserName(username);
-        Map map=new HashMap();
-        System.out.println(user.get(0).getEmail());
-        if(user.size()>0){
-            map.put("email",user.get(0).getEmail());
+        Map map = new HashMap();
+        if (user.size() > 0) {
+            map.put("email", user.get(0).getEmail());
         }
         return map;
     }
 
+    //根据用户名得到id
     @RequestMapping("getId/{username}")
-    public Map getId(@PathVariable("username") String username){
+    public Map getId(@PathVariable("username") String username) {
         List<User> user = us.findByUserName(username);
-        Map map=new HashMap();
-        System.out.println(user.get(0).getId());
-        if(user.size()>0){
-            map.put("id",user.get(0).getId());
+        Map map = new HashMap();
+        if (user.size() > 0) {
+            map.put("id", user.get(0).getId());
         }
         return map;
     }
+
+    //根据用户名得到头像id
+    @RequestMapping("getHeadImg/{username}")
+    public Map getHeadImg(@PathVariable("username") String username) {
+        List<User> user = us.findByUserName(username);
+        Map map = new HashMap();
+        if (user.size() > 0) {
+            map.put("headimgid", user.get(0).getHeadimgid());
+        }
+        return map;
+    }
+
+
+
+    /**
+     * 上传头像
+     * @param myFile
+     * @param session
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "uploadheadimg/{username}", method = RequestMethod.POST)
+    public Map setHeadImg(@RequestParam MultipartFile myFile,@PathVariable("username") String  username, HttpSession session) throws IOException {
+        String originalFilename = myFile.getOriginalFilename();
+        Map map = new HashMap();
+        List<User> user = us.findByUserName(username);
+        int pos = originalFilename.lastIndexOf(".");
+        String suffix = originalFilename.substring(pos);
+        String uuid = UUID.randomUUID().toString();
+        String fullPath = filepath + File.separator + uuid + suffix;
+        String headimgid = File.separator + uuid + suffix;
+        String lastpath=filepath + user.get(0).getHeadimgid();
+        InputStream in = null;
+        try {
+            in = myFile.getInputStream();
+            OutputStream out = new FileOutputStream(new File(fullPath));
+            int len = 0;
+            byte[] buf = new byte[100 * 1024];
+            while ((len = in.read(buf)) != -1) {
+                out.write(buf, 0, len);
+            }
+            out.close();
+            in.close();
+            File lastfile = new File(lastpath);
+            if (lastfile.isFile() && lastfile.exists()) {
+                lastfile.delete();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        User user1 = new User(user.get(0).getId(), user.get(0).getUsername(), user.get(0).getPassword(), user.get(0).getEmail(), headimgid);
+        User user2 = us.save(user1);
+        if(user2.getId()!=""){
+            map.put("result","success");
+        }else{
+            map.put("result","fail");
+        }
+        map.put("headimgid", headimgid);
+        return map;
+    }
+
+
 
 
     /**
@@ -175,7 +240,7 @@ public class UserController {
         String loginUsername = request.getParameter("username");
 //        us.addCookie(loginUsername, response, request);
         List<User> user = us.findByUserName(loginUsername);
-        if (user.size()>0) {
+        if (user.size() > 0) {
             us.addCookie(loginUsername, response, request);
             map.put("result", "success");
         } else {

@@ -96,19 +96,29 @@ $(document).ready(function () {
             return string;
         }
     }
+
     var base = new Base64();
     $.ajax({
         type: "POST",
         url: "user/getCookie",
         dataType: "json",
         success: function (data) {
-            var loginUsername =base.decode(data.loginUsername)
-            if(loginUsername==""){
-                self.location="login.html";
+            var loginUsername = base.decode(data.loginUsername)
+            if (loginUsername == "") {
+                self.location = "login.html";
             }
             console.log(data);
             console.log(loginUsername);
             $("#loginusername").text(loginUsername);
+            $.ajax({
+                type: "POST",
+                url: "user/getHeadImg/" + data.loginUsername,
+                dataType: "json",
+                success: function (json2) {
+                    var headimgid = json2.headimgid;
+                    $("#headimg1").attr("src", "image/" + headimgid);
+                }
+            });
         },
         error: function () {
             alert("cookies 信息获取失败！");
@@ -122,14 +132,14 @@ $(document).ready(function () {
             type: "POST",
             url: "user/logoutCookie",
             dataType: "json",
-            success:function (data) {
+            success: function (data) {
                 console.log(data);
-                self.location="login.html";
+                self.location = "login.html";
             }
         })
     })
 
     $("#profilebtn").click(function () {
-        self.location="profile.html";
+        self.location = "profile.html";
     })
 })

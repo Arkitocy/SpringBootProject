@@ -205,11 +205,13 @@ $(function () {
         var username = base.encode($("#register-username").val());
         var password = base.encode($("#register-password1").val());
         var email = base.encode($("#register-email").val());
+        var headimgid="defaultheadimg.jpg";
         console.log(username);
         var adata = {
             "username": username,
             "password": password,
-            "email": email
+            "email": email,
+            "headimgid":headimgid
         }
         console.log(adata);
         var data = JSON.stringify(adata);

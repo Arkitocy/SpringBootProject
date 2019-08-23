@@ -123,10 +123,21 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (json) {
                     var email = base.decode(json.email);
-                    console.log(email);
                     $("#email").attr("value", email);
                 }
-            })
+            });
+            $.ajax({
+                type: "POST",
+                url: "user/getHeadImg/" + data.loginUsername,
+                dataType: "json",
+                success: function (json2) {
+                    var headimgid = json2.headimgid;
+                    console.log(headimgid);
+                    $("#headimg1").attr("src", "image/" + headimgid);
+                    $("#headimg2").attr("src", "image/" + headimgid);
+                }
+            });
+
         },
         error: function () {
             alert("cookies 信息获取失败！");
@@ -253,15 +264,40 @@ $(document).ready(function () {
                 //设置cookie
                 $.getJSON("user/setCookie", {"username": uname},
                     function (json) {
-                        if(json.result=="success"){
+                        if (json.result == "success") {
                             self.location = "profile.html";
-                        }else {
+                        } else {
                             alert("添加cookie失败")
                             self.location = "profile.html";
                         }
 
                     });
             }
+        })
+    })
+    //修改头像
+    $("#headimg2").click(function () {
+        $('#uploadmodal').modal("show");
+        $("button[name='uploadbtn2']").click(function () {
+            var formData = new FormData(document.getElementById("upload-form"));
+            $.ajax({
+                url: "user/uploadheadimg/" + base.encode(username),
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (resp) {
+                    if (resp.result == "success") {
+                        var headimgid = resp.headimgid;
+                        $("#headimg2").attr("src", "image/" + headimgid);
+                        $("#headimg1").attr("src", "image/" + headimgid);
+                        $('#uploadmodal').modal('hide');
+                    } else {
+                        alert("上传失败");
+                    }
+                }
+            });
+
         })
     })
 })
