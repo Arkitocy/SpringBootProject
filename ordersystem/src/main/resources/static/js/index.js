@@ -145,4 +145,17 @@ $(document).ready(function () {
     $("#profilebtn").click(function () {
         self.location = "profile.html";
     })
+    
+    $("#waitpayid").click(function () {
+        alert("待付款")
+    })
+    $("#waitpostid").click(function () {
+        alert("待发货")
+    })
+    $("#waitgetid").click(function () {
+        alert("收货")
+    })
+    $("#waitbackid").click(function () {
+        alert("退款")
+    })
 })

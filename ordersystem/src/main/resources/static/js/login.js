@@ -132,7 +132,6 @@ $(function () {
         var username = base.encode($("#login-username").val());
         var password = base.encode($("#login-password").val());
         var rememberMe = $("#checkbox").is(":checked");
-
         $.ajax({
             type: "POST",
             url: "login",

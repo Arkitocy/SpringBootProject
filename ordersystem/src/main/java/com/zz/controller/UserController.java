@@ -227,7 +227,6 @@ public class UserController {
         } else {
             map.put("result", "login.html");
         }
-
         return map;
     }
 
@@ -246,7 +245,6 @@ public class UserController {
         } else {
             map.put("result", "fail");
         }
-
         return map;
     }
 
