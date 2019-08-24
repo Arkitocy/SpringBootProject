@@ -97,6 +97,7 @@ $(function () {
             return string;
         }
     }
+
     var base = new Base64();
     $("#regidter").attr('disabled', true);
     $("#namep").hide();
@@ -119,15 +120,18 @@ $(function () {
             $("#regidter").attr('disabled', true);
         }
         var username = base.encode(name);
-        $.getJSON("user/checkName/" + username, function (json) {
-            var rs = json.result + "";
-            console.log(rs);
-            if (rs == 'false') {
-                $("#nameppp").hide();
-                $("#regidter").attr('disabled', false);
-            } else {
-                $("#nameppp").show();
-                $("#regidter").attr('disabled', true);
+        $.ajax({
+            url: "user/checkName",
+            type: "POST",
+            data: {"username": username},
+            success: function (json) {
+                if (json.result == "true") {
+                    $("#nameppp").hide();
+                    $("#regidter").attr('disabled', false);
+                } else {
+                    $("#nameppp").show();
+                    $("#regidter").attr('disabled', true);
+                }
             }
         });
     });
@@ -143,16 +147,21 @@ $(function () {
             $("#regidter").attr('disabled', true);
         }
         var emailcode = base.encode(email);
-        $.getJSON("user/checkEmail/" + emailcode, function (json) {
-            var rs = json.result + "";
-            if (rs == 'false') {
-                $("#emailpp").hide();
-                $("#regidter").attr('disabled', false);
-            } else {
-                $("#emailpp").show();
-                $("#regidter").attr('disabled', true);
+        $.ajax({
+            url: "user/checkEmail",
+            type: "POST",
+            data: {"emailcode": emailcode},
+            success: function (res) {
+                console.log(res);
+                if (res.result == "true") {
+                    $("#emailpp").hide();
+                    $("#regidter").attr('disabled', false);
+                } else {
+                    $("#emailpp").show();
+                    $("#regidter").attr('disabled', true);
+                }
             }
-        });
+        })
 
     })
     //验证密码
@@ -205,40 +214,44 @@ $(function () {
         var username = base.encode($("#register-username").val());
         var password = base.encode($("#register-password1").val());
         var email = base.encode($("#register-email").val());
-        var headimgid="defaultheadimg.jpg";
-        var beinvitedcode=$("#register-beinvitedcode").val();
-        console.log(username);
-        var adata = {
-            "username": username,
-            "password": password,
-            "email": email,
-            "headimgid":headimgid,
-            "beinvitedcode":beinvitedcode
+        var headimgid = "defaultheadimg.jpg";
+        var beinvitedcode = $("#register-beinvitedcode").val();
+        var checkbox = $("#register-agree").is(":checked");
+        console.log(checkbox)
+        if (username == "" || password == "" || email == "" || checkbox) {
+            alert("请填写完整信息");
+        } else {
+            var adata = {
+                "username": username,
+                "password": password,
+                "email": email,
+                "headimgid": headimgid,
+                "beinvitedcode": beinvitedcode
 
-        }
-        console.log(adata);
-        var data = JSON.stringify(adata);
-        console.log(data);
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            data: data,
-            url: "user/register",
-            success: function (res) {
-                console.log(res);
-                if (res != "" && res == "success") {
-                    alert("注册成功");
-                    window.location.href = "login.html";
-                } else {
-                    alert("注册失败");
+            }
+            var data = JSON.stringify(adata);
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                data: data,
+                url: "user/register",
+                success: function (res) {
+                    console.log(res);
+                    if (res != "" && res == "success") {
+                        alert("注册成功");
+                        window.location.href = "login.html";
+                    } else {
+                        alert("注册失败");
+                        window.location.href = "register.html";
+                    }
+                },
+                error: function () {
+                    alert("失败");
                     window.location.href = "register.html";
                 }
-            },
-            error: function () {
-                alert("失败");
-                window.location.href = "register.html";
-            }
-        });
+            });
+        }
+
     })
 
 })

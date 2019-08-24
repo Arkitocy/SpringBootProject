@@ -96,6 +96,7 @@ $(function () {
             return string;
         }
     }
+
     var base = new Base64();
     $("#loginbtn").attr('disabled', true);
     $("#namep").hide();
@@ -130,11 +131,12 @@ $(function () {
     $("#loginbtn").click(function () {
         var username = base.encode($("#login-username").val());
         var password = base.encode($("#login-password").val());
-        var rememberMe=$("#checkbox").is(":checked");
+        var rememberMe = $("#checkbox").is(":checked");
+
         $.ajax({
             type: "POST",
             url: "login",
-            data: {"username": username,"password": password,"rememberMe": rememberMe},
+            data: {"username": username, "password": password, "rememberMe": rememberMe},
             dataType: "json",
             success: function (r) {
                 console.log(r);
@@ -144,9 +146,11 @@ $(function () {
                     alert(r.msg);
                 }
             },
-            error:function () {
+            error: function () {
                 console.log("error")
             }
         });
+
+
     })
 })

@@ -6,6 +6,7 @@ import com.zz.entity.User;
 import com.zz.service.UserService;
 
 import com.zz.utils.KeyUtils;
+import com.zz.utils.MD5Utils;
 import com.zz.utils.Md5Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -44,7 +45,7 @@ public class UserController {
         Md5Util md5 = new Md5Util();
         user1.setId(md5.StringInMd5(KeyUtils.genUniqueKey()));
         user1.setUsername(user.getUsername());
-        user1.setPassword(md5.StringInMd5(user.getPassword()));
+        user1.setPassword(MD5Utils.encrypt(user.getUsername(), user.getPassword()));
         user1.setEmail(user.getEmail());
         user1.setHeadimgid(user.getHeadimgid());
         user1.setBeinvitedcode(user.getBeinvitedcode());
@@ -78,35 +79,36 @@ public class UserController {
 
     @ApiOperation(value = "确认用户名是否重复")
     @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path")
-    @PostMapping("checkName/{username}")
+    @PostMapping("checkName")
     @ResponseBody
-    public Map checkName(@PathVariable("username") String username) {
+    public Map checkName(HttpServletRequest request) {
         Md5Util md5 = new Md5Util();
-        String name = username;//md5加密
-        List<User> user = us.findByUserName(name);
-        boolean result = false;
-        if (user.size() > 0) {
-            result = true;
-        }
         Map map = new HashMap();
-        map.put("result", result);
+        String name = request.getParameter("username");//md5加密
+        List<User> user = us.findByUserName(name);
+        if (user.size() > 0) {
+            map.put("result","false");
+        }else {
+            map.put("result","true");
+        }
         return map;
     }
 
     @ApiOperation(value = "确认邮箱是否重复")
     @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path")
-    @PostMapping("checkEmail/{email}")
+    @PostMapping("checkEmail")
     @ResponseBody
-    public Map checkEmail(@PathVariable("email") String email) {
-        Md5Util md5 = new Md5Util();
-        String emailcode = email;//md5加密
-        List<User> user = us.findByEmail(emailcode);
-        boolean result = false;
-        if (user.size() > 0) {
-            result = true;
-        }
+    public Map checkEmail(HttpServletRequest request) {
         Map map = new HashMap();
-        map.put("result", result);
+        String email = request.getParameter("emailcode");
+        String emailcode = email;//md5加密
+        System.out.println(emailcode);
+        List<User> user = us.findByEmail(emailcode);
+        if (user.size() > 0) {
+            map.put("result","false");
+        }else {
+            map.put("result","true");
+        }
         return map;
     }
 
