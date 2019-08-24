@@ -2685,7 +2685,7 @@ function localeMonthsParse (monthName, format, strict) {
             regex = '^' + this.months(mom, '') + '|^' + this.monthsShort(mom, '');
             this._monthsParse[i] = new RegExp(regex.replace('.', ''), 'i');
         }
-        // test the regex
+        // Swagger注释 the regex
         if (strict && format === 'MMMM' && this._longMonthsParse[i].test(monthName)) {
             return i;
         } else if (strict && format === 'MMM' && this._shortMonthsParse[i].test(monthName)) {
@@ -3152,7 +3152,7 @@ function localeWeekdaysParse (weekdayName, format, strict) {
             regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
             this._weekdaysParse[i] = new RegExp(regex.replace('.', ''), 'i');
         }
-        // test the regex
+        // Swagger注释 the regex
         if (strict && format === 'dddd' && this._fullWeekdaysParse[i].test(weekdayName)) {
             return i;
         } else if (strict && format === 'ddd' && this._shortWeekdaysParse[i].test(weekdayName)) {
@@ -10595,7 +10595,7 @@ module.exports = {
 		},
 
 		/**
-		 * Point mode returns all elements that hit test based on the event position
+		 * Point mode returns all elements that hit Swagger注释 based on the event position
 		 * of the event
 		 * @function Chart.Interaction.modes.intersect
 		 * @param chart {chart} the chart we are returning items from
@@ -10642,7 +10642,7 @@ module.exports = {
 		},
 
 		/**
-		 * x mode returns the elements that hit-test at the current x coordinate
+		 * x mode returns the elements that hit-Swagger注释 at the current x coordinate
 		 * @function Chart.Interaction.modes.x
 		 * @param chart {chart} the chart we are returning items from
 		 * @param e {Event} the event we are find things at
@@ -10673,7 +10673,7 @@ module.exports = {
 		},
 
 		/**
-		 * y mode returns the elements that hit-test at the current y coordinate
+		 * y mode returns the elements that hit-Swagger注释 at the current y coordinate
 		 * @function Chart.Interaction.modes.y
 		 * @param chart {chart} the chart we are returning items from
 		 * @param e {Event} the event we are find things at
@@ -14349,7 +14349,7 @@ var helpers = {
 
 	/**
 	 * Returns true if `value` is neither null nor undefined, else returns false.
-	 * @param {*} value - The value to test.
+	 * @param {*} value - The value to Swagger注释.
 	 * @returns {Boolean}
 	 * @since 2.7.0
 	 */
@@ -14359,7 +14359,7 @@ var helpers = {
 
 	/**
 	 * Returns true if `value` is an array, else returns false.
-	 * @param {*} value - The value to test.
+	 * @param {*} value - The value to Swagger注释.
 	 * @returns {Boolean}
 	 * @function
 	 */
@@ -14369,7 +14369,7 @@ var helpers = {
 
 	/**
 	 * Returns true if `value` is an object (excluding null), else returns false.
-	 * @param {*} value - The value to test.
+	 * @param {*} value - The value to Swagger注释.
 	 * @returns {Boolean}
 	 * @since 2.7.0
 	 */

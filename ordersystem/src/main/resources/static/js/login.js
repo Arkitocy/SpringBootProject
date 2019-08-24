@@ -130,14 +130,23 @@ $(function () {
     $("#loginbtn").click(function () {
         var username = base.encode($("#login-username").val());
         var password = base.encode($("#login-password").val());
-        var checkbox=$("#checkbox").is(":checked");
-        console.log(checkbox);
-        $.getJSON("user/login",{"username":username,"password":password,"rememberMe": checkbox},
-            function (json) {
-            console.log(json);
-
-                self.location = json.result;
-        }
-        )
+        var rememberMe=$("#checkbox").is(":checked");
+        $.ajax({
+            type: "POST",
+            url: "login",
+            data: {"username": username,"password": password,"rememberMe": rememberMe},
+            dataType: "json",
+            success: function (r) {
+                console.log(r);
+                if (r.code == 0) {
+                    location.href = "index.html";
+                } else {
+                    alert(r.msg);
+                }
+            },
+            error:function () {
+                console.log("error")
+            }
+        });
     })
 })

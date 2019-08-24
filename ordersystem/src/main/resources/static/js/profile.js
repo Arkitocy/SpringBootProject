@@ -102,59 +102,58 @@ $(document).ready(function () {
 
     var base = new Base64();
     var username;
-    //页面刷新时从cookie中取出username
+
     $.ajax({
         type: "POST",
-        url: "user/getCookie",
-        dataType: "json",
-        success: function (data) {
-            var loginUsername = base.decode(data.loginUsername)
-            if (loginUsername == "") {
+        url: "getUser",
+        success: function (user) {
+            username = base.decode(user.username);
+            if (username != "") {
+                $("#loginusername").text(username);
+                $("#username").attr("value", username);
+                $("#username").text(username);
+                $.ajax({
+                    type: "POST",
+                    url: "user/getEmail/" + user.username,
+                    dataType: "json",
+                    success: function (json) {
+                        var email = base.decode(json.email);
+                        $("#email").attr("value", email);
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "user/getHeadImg/" + user.username,
+                    dataType: "json",
+                    success: function (json2) {
+                        var headimgid = json2.headimgid;
+                        $("#headimg1").attr("src", "image/" + headimgid);
+                        $("#headimg2").attr("src", "image/" + headimgid);
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "user/getInviteCode/" + user.username,
+                    dataType: "json",
+                    success: function (json3) {
+                        var myinvitecode = json3.myinvitecode;
+                        $("#myinvitecode").text(myinvitecode);
+                    }
+                });
+            } else {
                 self.location = "login.html";
             }
-            $("#loginusername").text(loginUsername);
-            username = loginUsername;
-            $("#username").attr("value", username);
-            $("#username").text(username);
-            //根据username查找邮箱
-            $.ajax({
-                type: "POST",
-                url: "user/getEmail/" + data.loginUsername,
-                dataType: "json",
-                success: function (json) {
-                    var email = base.decode(json.email);
-                    $("#email").attr("value", email);
-                }
-            });
-            $.ajax({
-                type: "POST",
-                url: "user/getHeadImg/" + data.loginUsername,
-                dataType: "json",
-                success: function (json2) {
-                    var headimgid = json2.headimgid;
-                    console.log(headimgid);
-                    $("#headimg1").attr("src", "image/" + headimgid);
-                    $("#headimg2").attr("src", "image/" + headimgid);
-                }
-            });
-
-        },
-        error: function () {
-            alert("cookies 信息获取失败！");
         }
     })
+
 
     //注销
     $("#logoutbtn").click(function () {
         $.ajax({
             type: "POST",
-            url: "user/logoutCookie",
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                self.location = "login.html";
-            }
+            url: "logout"
         })
+        self.location="login.html";
     })
     //进入profile页面
     $("#profilebtn").click(function () {
@@ -298,6 +297,24 @@ $(document).ready(function () {
                 }
             });
 
+        })
+    })
+    //提交邀请码
+    $("#saveinvitebtn").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "user/saveinvite/" + base.encode(username) + "/" + $("#mybeinvitedcode").val(),
+            contentType: "application/json",
+            success: function (inv) {
+                if (inv.result == "success") {
+                    alert("绑定成功");
+                } else if (inv.result == "already") {
+                    alert("已绑定过邀请");
+                } else {
+                    alert("绑定失败");
+                }
+
+            }
         })
     })
 })

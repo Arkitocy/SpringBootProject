@@ -206,12 +206,15 @@ $(function () {
         var password = base.encode($("#register-password1").val());
         var email = base.encode($("#register-email").val());
         var headimgid="defaultheadimg.jpg";
+        var beinvitedcode=$("#register-beinvitedcode").val();
         console.log(username);
         var adata = {
             "username": username,
             "password": password,
             "email": email,
-            "headimgid":headimgid
+            "headimgid":headimgid,
+            "beinvitedcode":beinvitedcode
+
         }
         console.log(adata);
         var data = JSON.stringify(adata);

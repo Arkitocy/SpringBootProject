@@ -98,45 +98,35 @@ $(document).ready(function () {
     }
 
     var base = new Base64();
+    var username;
     $.ajax({
         type: "POST",
-        url: "user/getCookie",
-        dataType: "json",
-        success: function (data) {
-            var loginUsername = base.decode(data.loginUsername)
-            if (loginUsername == "") {
+        url: "getUser",
+        success: function (user) {
+            username = base.decode(user.username);
+            if (username != "") {
+                $("#loginusername").text(username);
+                $.ajax({
+                    type: "POST",
+                    url: "user/getHeadImg/" + user.username,
+                    dataType: "json",
+                    success: function (json2) {
+                        var headimgid = json2.headimgid;
+                        $("#headimg1").attr("src", "image/" + headimgid);
+                    }
+                });
+            } else {
                 self.location = "login.html";
             }
-            console.log(data);
-            console.log(loginUsername);
-            $("#loginusername").text(loginUsername);
-            $.ajax({
-                type: "POST",
-                url: "user/getHeadImg/" + data.loginUsername,
-                dataType: "json",
-                success: function (json2) {
-                    var headimgid = json2.headimgid;
-                    $("#headimg1").attr("src", "image/" + headimgid);
-                }
-            });
-        },
-        error: function () {
-            alert("cookies 信息获取失败！");
         }
-
-
     })
 
     $("#logoutbtn").click(function () {
         $.ajax({
             type: "POST",
-            url: "user/logoutCookie",
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                self.location = "login.html";
-            }
+            url: "logout"
         })
+        self.location="login.html";
     })
 
     $("#profilebtn").click(function () {

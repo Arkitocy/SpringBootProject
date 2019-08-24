@@ -3,11 +3,14 @@ package com.zz.controller;
 import com.google.gson.Gson;
 import com.zz.entity.Cookies;
 import com.zz.entity.User;
-import com.zz.service.TokenService;
 import com.zz.service.UserService;
 
 import com.zz.utils.KeyUtils;
 import com.zz.utils.Md5Util;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +24,7 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.*;
 
-
+@Api(value = "用户Controller")
 @RestController
 @RequestMapping("user")
 public class UserController {
@@ -29,18 +32,13 @@ public class UserController {
     //userservice上添加@Service注解
     @Resource
     UserService us;
-    @Resource
-    TokenService ts;
     @Value("${fileUpLoadPath}")
     String filepath;
 
-    /**
-     * 注册方法
-     *
-     * @param user
-     * @return
-     */
-    @RequestMapping("register")
+
+    @ApiOperation(value = "注册")
+    @ApiImplicitParam(name = "user", value = "用户实体", required = true, dataType = "User")
+    @PostMapping("register")
     public Object save(@RequestBody User user) {
         User user1 = new User();
         Md5Util md5 = new Md5Util();
@@ -49,6 +47,8 @@ public class UserController {
         user1.setPassword(md5.StringInMd5(user.getPassword()));
         user1.setEmail(user.getEmail());
         user1.setHeadimgid(user.getHeadimgid());
+        user1.setBeinvitedcode(user.getBeinvitedcode());
+        user1.setInvitecode(md5.StringInMd5(KeyUtils.genUniqueKey() + user.getUsername()));
         if (us.save(user1) != null) {
             return "success";
         } else {
@@ -56,7 +56,12 @@ public class UserController {
         }
     }
 
-    @RequestMapping("update/{username}")
+    @ApiOperation(value = "更新")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path"),
+            @ApiImplicitParam(name = "user", value = "用户实体", required = true, dataType = "User")
+    })
+    @PostMapping("update/{username}")
     public Map update(@RequestBody User user, @PathVariable("username") String username) {
         User user1 = new User();
         Map map = new HashMap();
@@ -71,13 +76,9 @@ public class UserController {
         return map;
     }
 
-    /**
-     * 比较是否有重名
-     *
-     * @param username
-     * @return
-     */
-    @RequestMapping("checkName/{username}")
+    @ApiOperation(value = "确认用户名是否重复")
+    @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path")
+    @PostMapping("checkName/{username}")
     @ResponseBody
     public Map checkName(@PathVariable("username") String username) {
         Md5Util md5 = new Md5Util();
@@ -92,13 +93,9 @@ public class UserController {
         return map;
     }
 
-    /**
-     * 检查邮箱
-     *
-     * @param email
-     * @return
-     */
-    @RequestMapping("checkEmail/{email}")
+    @ApiOperation(value = "确认邮箱是否重复")
+    @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path")
+    @PostMapping("checkEmail/{email}")
     @ResponseBody
     public Map checkEmail(@PathVariable("email") String email) {
         Md5Util md5 = new Md5Util();
@@ -113,13 +110,9 @@ public class UserController {
         return map;
     }
 
-    /**
-     * 查询邮箱
-     *
-     * @param username
-     * @return
-     */
-    @RequestMapping("getEmail/{username}")
+    @ApiOperation(value = "查询邮箱")
+    @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path")
+    @PostMapping("getEmail/{username}")
     public Map getEmail(@PathVariable("username") String username) {
         List<User> user = us.findByUserName(username);
         Map map = new HashMap();
@@ -129,8 +122,22 @@ public class UserController {
         return map;
     }
 
-    //根据用户名得到id
-    @RequestMapping("getId/{username}")
+
+    @ApiOperation(value = "查询邀请码")
+    @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path")
+    @PostMapping("getInviteCode/{username}")
+    public Map getInviteCode(@PathVariable("username") String username) {
+        List<User> user = us.findByUserName(username);
+        Map map = new HashMap();
+        if (user.size() > 0) {
+            map.put("myinvitecode", user.get(0).getInvitecode());
+        }
+        return map;
+    }
+
+    @ApiOperation(value = "查询用户id")
+    @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path")
+    @PostMapping("getId/{username}")
     public Map getId(@PathVariable("username") String username) {
         List<User> user = us.findByUserName(username);
         Map map = new HashMap();
@@ -140,8 +147,9 @@ public class UserController {
         return map;
     }
 
-    //根据用户名得到头像id
-    @RequestMapping("getHeadImg/{username}")
+    @ApiOperation(value = "查询用户头像id")
+    @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path")
+    @PostMapping("getHeadImg/{username}")
     public Map getHeadImg(@PathVariable("username") String username) {
         List<User> user = us.findByUserName(username);
         Map map = new HashMap();
@@ -152,16 +160,13 @@ public class UserController {
     }
 
 
-
-    /**
-     * 上传头像
-     * @param myFile
-     * @param session
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping(value = "uploadheadimg/{username}", method = RequestMethod.POST)
-    public Map setHeadImg(@RequestParam MultipartFile myFile,@PathVariable("username") String  username, HttpSession session) throws IOException {
+    @ApiOperation(value = "上传头像")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path"),
+            @ApiImplicitParam(name = "myFile", value = "头像文件", required = true, dataType = "MultipartFile")
+    })
+    @PostMapping(value = "uploadheadimg/{username}")
+    public Map setHeadImg(@RequestParam MultipartFile myFile, @PathVariable("username") String username, HttpSession session) throws IOException {
         String originalFilename = myFile.getOriginalFilename();
         Map map = new HashMap();
         List<User> user = us.findByUserName(username);
@@ -170,7 +175,7 @@ public class UserController {
         String uuid = UUID.randomUUID().toString();
         String fullPath = filepath + File.separator + uuid + suffix;
         String headimgid = File.separator + uuid + suffix;
-        String lastpath=filepath + user.get(0).getHeadimgid();
+        String lastpath = filepath + user.get(0).getHeadimgid();
         InputStream in = null;
         try {
             in = myFile.getInputStream();
@@ -191,27 +196,19 @@ public class UserController {
         }
         User user1 = new User(user.get(0).getId(), user.get(0).getUsername(), user.get(0).getPassword(), user.get(0).getEmail(), headimgid);
         User user2 = us.save(user1);
-        if(user2.getId()!=""){
-            map.put("result","success");
-        }else{
-            map.put("result","fail");
+        if (user2.getId() != "") {
+            map.put("result", "success");
+        } else {
+            map.put("result", "fail");
         }
         map.put("headimgid", headimgid);
         return map;
     }
 
 
-
-
-    /**
-     * 登录，使用cookie存放登陆用户名
-     *
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping("login")
+    @ApiOperation("登陆")
+    @ApiImplicitParam(name = "user", value = "用户实体", required = true, dataType = "User", paramType = "Get")
+    @GetMapping("login")
     public Map loginValidate(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map map = new HashMap();
         Md5Util md5 = new Md5Util();
@@ -232,7 +229,8 @@ public class UserController {
         return map;
     }
 
-    @RequestMapping("setCookie")
+    @ApiOperation("设置cookie")
+    @PostMapping("setCookie")
     public Map setCookie(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map map = new HashMap();
         Md5Util md5 = new Md5Util();
@@ -250,14 +248,8 @@ public class UserController {
         return map;
     }
 
-    /**
-     *     	 * 获取 Cookie中的信息
-     *
-     * @param request
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping("getCookie")
+    @ApiOperation("获取cookie")
+    @PostMapping("getCookie")
     @ResponseBody
     public String getCookie(HttpServletRequest request) throws IOException {
         String loginUsername = "";
@@ -280,15 +272,8 @@ public class UserController {
         return gson.toJson(cookie);
     }
 
-    /**
-     * 登出清除cookie
-     *
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping("logoutCookie")
+    @ApiOperation("登出清除cookie")
+    @PostMapping("logoutCookie")
     @ResponseBody
     public Map logoutCookie(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map map = new HashMap();
@@ -297,6 +282,30 @@ public class UserController {
         loginUsernameCookie.setPath("/");
         response.addCookie(loginUsernameCookie);//覆盖原有cookie
         map.put("result", "success");
+        return map;
+    }
+
+    @ApiOperation("保存邀请码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "path"),
+            @ApiImplicitParam(name = "beinvitedcode", value = "被邀请码", required = true, dataType = "String", paramType = "path")
+    })
+    @PostMapping("saveinvite/{username}/{beinvitedcode}")
+    public Map savebeinvitedcod(@PathVariable("username") String username, @PathVariable("beinvitedcode") String beinvitedcode) {
+        Map map = new HashMap();
+        List<User> users = us.findByUserName(username);
+        User user = users.get(0);
+        System.out.println("-----" + user.getBeinvitedcode());
+        if ("".equals(user.getBeinvitedcode())) {
+            user.setBeinvitedcode(beinvitedcode);
+            if (us.save(user) != null) {
+                map.put("result", "success");
+            } else {
+                map.put("result", "fail");
+            }
+        } else {
+            map.put("result", "already");
+        }
         return map;
     }
 }
