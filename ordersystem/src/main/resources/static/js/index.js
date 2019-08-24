@@ -121,19 +121,6 @@ $(document).ready(function () {
         }
     })
 
-    // $("#logoutbtn").click(function () {
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "user/logoutCookie",
-    //         dataType: "json",
-    //         success: function (data) {
-    //             console.log(data);
-    //             self.location = "login.html";
-    //         }
-    //     })
-    // })
-
-
     $("#logoutbtn").click(function () {
         $.ajax({
             type: "POST",
