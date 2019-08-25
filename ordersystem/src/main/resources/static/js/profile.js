@@ -101,13 +101,15 @@ $(document).ready(function () {
     }
 
     var base = new Base64();
-    var username;
-
+    var username = "";
+    var name = "";
     $.ajax({
         type: "POST",
         url: "getUser",
         success: function (user) {
             username = base.decode(user.username);
+            name = user.username;
+            console.log(username)
             if (username != "") {
                 $("#loginusername").text(username);
                 $("#username").attr("value", username);
@@ -140,12 +142,35 @@ $(document).ready(function () {
                         $("#myinvitecode").text(myinvitecode);
                     }
                 });
+                $.ajax({
+                    type: "POST",
+                    url: "address/showAddress/" + user.username,
+                    dataType: "json",
+                    success: function (res) {
+                        console.log(res);
+                        $("#addressbody").empty();
+                        for (var i = 0; i < res.length; i++) {
+                            $("#addressbody").append(
+                                "<tr id='tridval" + i + "'>"
+                                + "<td>" + res[i].reciever
+                                + "</td>"
+                                + "<td>" + res[i].mainaddress
+                                + "</td>"
+                                + "<td>" + res[i].detailaddress
+                                + "</td>"
+                                + "<td>" + res[i].phone
+                                + "</td>"
+                                + "<td><button type='button' name='btn001' class='btn btn-info btn-sm' id='btn2" + i + "'>删除</button>"
+                                + "</td></tr>"
+                            );
+                        }
+                    }
+                });
             } else {
                 self.location = "login.html";
             }
         }
-    })
-
+    });
 
     //注销
     $("#logoutbtn").click(function () {
@@ -153,12 +178,14 @@ $(document).ready(function () {
             type: "POST",
             url: "logout"
         })
-        self.location="login.html";
+        self.location = "login.html";
     })
     //进入profile页面
     $("#profilebtn").click(function () {
         self.location = "profile.html";
     })
+    //
+
 
     //新建收货地址
     $("#saveaddressmodalbtn").click(function () {
@@ -170,19 +197,41 @@ $(document).ready(function () {
                 $("#phonep").hide();
             }
         });
+
         $("#savenewaddressbtn").click(function () {
-            var mainaddress = $("#cmbProvince").val() + " " + $("#cmbCity").val() + " " + $("#cmbArea").val();
-            var userid //依据上面的username去user表找id
+            var mainaddress = $("#cmbProvince").val() + "   " + $("#cmbCity").val() + " " + $("#cmbArea").val();
             var detailaddress = $("#detailaddress").val();
             var phone = $("#phone").val();
-            if (userid == null || detailaddress == null || !(/^1[3456789]\d{9}$/.test(phone)) || mainaddress == null) {
+            var reciever = $("#receiver").val();
+            console.log(detailaddress);
+            console.log(mainaddress);
+            console.log(phone);
+            console.log(reciever);
+            if (reciever == null || detailaddress == null || !(/^1[3456789]\d{9}$/.test(phone)) || mainaddress == null) {
                 alert("请填写完整信息");
             } else {
-                //用.ajax方法将数据存入数据库中，返回map对象然后重新刷新页面
-                console.log(mainaddress);
-                console.log(detailaddress);
-                console.log(phone);
+                var adata = {
+                    "reciever": reciever,
+                    "phone": phone,
+                    "mainaddress": mainaddress,
+                    "detailaddress": detailaddress
+                }
                 console.log(username);
+                var data = JSON.stringify(adata);
+                $.ajax({
+                    type: "POST",
+                    url: "address/addAddress/" + base.encode(username),
+                    contentType: "application/json",
+                    data: data,
+                    success: function (res) {
+                        console.log(res.result);
+                        if (res.result == "success") {
+                            self.location = "profile.html"
+                        } else {
+                            alert("地址存储失败")
+                        }
+                    }
+                })
             }
         })
     })

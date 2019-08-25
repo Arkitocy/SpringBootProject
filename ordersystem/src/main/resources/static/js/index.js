@@ -126,23 +126,28 @@ $(document).ready(function () {
             type: "POST",
             url: "logout"
         })
-        self.location="login.html";
+        self.location = "login.html";
     })
 
     $("#profilebtn").click(function () {
         self.location = "profile.html";
     })
-    
+
     $("#waitpayid").click(function () {
+        document.getElementById("tableid").removeAttribute("hidden");
+
         alert("待付款")
     })
     $("#waitpostid").click(function () {
+        document.getElementById("tableid").removeAttribute("hidden");
         alert("待发货")
     })
     $("#waitgetid").click(function () {
+        document.getElementById("tableid").removeAttribute("hidden");
         alert("收货")
     })
     $("#waitbackid").click(function () {
+        document.getElementById("tableid").removeAttribute("hidden");
         alert("退款")
     })
 })
