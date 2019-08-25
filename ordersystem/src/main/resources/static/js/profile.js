@@ -1,5 +1,6 @@
 $(document).ready(function () {
     addressInit('cmbProvince', 'cmbCity', 'cmbArea');
+    addressInit('cmbProvince2', 'cmbCity2', 'cmbArea2');
 
     //base64加密 向后端传输的数据统一使用 base.encode()加密 后端传来的数据使用base.decode()解密
     function Base64() {
@@ -160,30 +161,88 @@ $(document).ready(function () {
                                 + "</td>"
                                 + "<td>" + res[i].phone
                                 + "</td>"
+                                + "<td><button type='button' name='alterbtn' class='btn btn-info btn-sm' id=" + res[i].id + ">修改</button>"
+                                + "</td>"
                                 + "<td><button type='button' name='deletebtn' class='btn btn-info btn-sm' id=" + res[i].id + ">删除</button>"
                                 + "</td></tr>"
                             );
                         }
-                        $("button[name='deletebtn']").click(function(){
-                            var id=this.id;
+                        $("button[name='alterbtn']").click(function () {
+                            var id = this.id;
 
-                            console.log("****************"+id);
+                            $("#saveaddressmodal2").modal("show");
+                            console.log("****************" + id);
+                            $.ajax({
+                                type: "POST",
+                                url: "address/getAddress/" + id,
+                                dataType: "json",
+                                success: function (json) {
+                                    var id = json.id;
+                                    var userid= json.userid;
+                                    var reciever=json.reciever;
+                                    var cmbProvince=json.cmbProvince;
+                                    var cmbCity=json.cmbCity;
+                                    var cmbArea=json.cmbArea;
+                                    var detailaddress=json.detailaddress;
+                                    var phone=json.phone;
+                                    $("#receiver2").attr("value", reciever);
+                                    // $("#cmbProvince2").val(cmbProvince);
+                                    $("#detailaddress2").attr("value", detailaddress);
+                                    $("#phone2").attr("value", phone);
+                                    console.log($("#cmbProvince2").val());
+                                    $("#savenewaddressbtn2").click(function () {
+                                        var mainaddress = $("#cmbProvince2").val() + " " + $("#cmbCity2").val() + " " + $("#cmbArea2").val();
+                                        var reciever2=$("#receiver2").val();
+                                        var phone2=$("#phone2").val();
+                                        var detailaddress2=$("#detailaddress2").val();
+                                        var adata = {
+                                            "id": id,
+                                            "userid": userid,
+                                            "reciever": reciever2,
+                                            "phone": phone2,
+                                            "mainaddress": mainaddress,
+                                            "detailaddress": detailaddress2
+                                        }
+                                        var data = JSON.stringify(adata);
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "address/alterAddress/" + id,
+                                            contentType: "application/json",
+                                            data: data,
+                                            success: function (res) {
+                                                console.log(res.result);
+                                                if (res.result == "success1") {
+                                                    self.location = "profile.html"
+                                                } else {
+                                                    alert("地址存储失败")
+                                                }
+                                            }
+                                        })
+                                    })
+                                }
+                            });
+
+                        })
+
+                        $("button[name='deletebtn']").click(function () {
+                            var id = this.id;
+                            $("#saveaddressmodal").modal("show");
+                            console.log("****************" + id);
                             $.ajax({
                                 type: "POST",
                                 url: "address/deleteAddress/" + id,
                                 contentType: "application/json",
                                 success: function (res) {
                                     console.log(res.result);
-                                    if(res.result=="success"){
-                                        self.location="profile.html"
-                                    }else{
-                                        alert("删除存储失败")
+                                    if (res.result == "success") {
+                                        self.location = "profile.html"
+                                    } else {
+                                        alert("删除地址失败")
                                     }
                                 }
                             })
 
                         });
-
                     }
                 });
             } else {
@@ -219,7 +278,7 @@ $(document).ready(function () {
         });
 
         $("#savenewaddressbtn").click(function () {
-            var mainaddress = $("#cmbProvince").val() + "   " + $("#cmbCity").val() + " " + $("#cmbArea").val();
+            var mainaddress = $("#cmbProvince").val() + " " + $("#cmbCity").val() + " " + $("#cmbArea").val();
             var detailaddress = $("#detailaddress").val();
             var phone = $("#phone").val();
             var reciever = $("#receiver").val();

@@ -9,6 +9,8 @@ import com.zz.service.UserService;
 
 import com.zz.utils.KeyUtils;
 import com.zz.utils.Md5Util;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,6 +73,45 @@ public class AddressController {
       }
       return map;
     }
+    @ApiOperation(value = "查询用户地址信息")
+    @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "String", paramType = "path")
+    @PostMapping("getAddress/{id}")
+    public Map getAddress(@PathVariable("id") String id) {
+        List<UserAddress> ua = as.findById(id);
+        Map map = new HashMap();
+        if (ua.size() > 0) {
+            map.put("id",ua.get(0).getId());
+            map.put("userid",ua.get(0).getUserid());
+            map.put("reciever", ua.get(0).getReciever());
+            String[] a =  ua.get(0).getMainaddress().split(" ");
+            map.put("cmbProvince",a[0]);
+            map.put("cmbCity",a[1]);
+            map.put("cmbArea",a[2]);
+            map.put("detailaddress", ua.get(0).getDetailaddress());
+            map.put("phone", ua.get(0).getPhone());
+        }
+        return map;
+    }
 
+
+
+    @RequestMapping("alterAddress/{id}")
+    public Map alterAddressById(@RequestBody UserAddress ua,@PathVariable("id") String id){
+        Map map=new HashMap();
+        UserAddress ua1=new UserAddress();
+        System.out.println(ua.getReciever());
+        ua1.setId(ua.getId());
+        ua1.setUserid(ua.getUserid());
+        ua1.setPhone(ua.getPhone());
+        ua1.setReciever(ua.getReciever());
+        ua1.setMainaddress(ua.getMainaddress());
+        ua1.setDetailaddress(ua.getDetailaddress());
+        if(as.save(ua1)!=null){
+            map.put("result","success1");
+        }else{
+            map.put("result","fail1");
+        }
+        return map;
+    }
 
 }
