@@ -160,10 +160,30 @@ $(document).ready(function () {
                                 + "</td>"
                                 + "<td>" + res[i].phone
                                 + "</td>"
-                                + "<td><button type='button' name='btn001' class='btn btn-info btn-sm' id='btn2" + i + "'>删除</button>"
+                                + "<td><button type='button' name='deletebtn' class='btn btn-info btn-sm' id=" + res[i].id + ">删除</button>"
                                 + "</td></tr>"
                             );
                         }
+                        $("button[name='deletebtn']").click(function(){
+                            var id=this.id;
+
+                            console.log("****************"+id);
+                            $.ajax({
+                                type: "POST",
+                                url: "address/deleteAddress/" + id,
+                                contentType: "application/json",
+                                success: function (res) {
+                                    console.log(res.result);
+                                    if(res.result=="success"){
+                                        self.location="profile.html"
+                                    }else{
+                                        alert("删除存储失败")
+                                    }
+                                }
+                            })
+
+                        });
+
                     }
                 });
             } else {
