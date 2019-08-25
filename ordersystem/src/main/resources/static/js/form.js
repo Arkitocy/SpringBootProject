@@ -97,8 +97,12 @@ $(document).ready(function () {
         }
     }
 
+    addressInit('cmbProvince', 'cmbCity', 'cmbArea');
+
     var base = new Base64();
-    var username;
+    var addrid = "";
+    var username = "";
+
     $.ajax({
         type: "POST",
         url: "getUser",
@@ -126,10 +130,91 @@ $(document).ready(function () {
             type: "POST",
             url: "logout"
         })
-        self.location="login.html";
+        self.location = "login.html";
     })
 
     $("#profilebtn").click(function () {
         self.location = "profile.html";
     })
+
+
+    $("#radioCustom1").click(function () {
+        $("#saveaddressmodal").modal("show");
+        $("#phone").blur(function () {
+            if (!(/^1[3456789]\d{9}$/.test($("#phone").val()))) {
+                $("#phonep").show();
+            } else {
+                $("#phonep").hide();
+            }
+        });
+
+        $("#savenewaddressbtn").click(function () {
+            var mainaddress = $("#cmbProvince").val() + "   " + $("#cmbCity").val() + " " + $("#cmbArea").val();
+            var detailaddress = $("#detailaddress").val();
+            var phone = $("#phone").val();
+            var reciever = $("#receiver").val();
+            console.log(detailaddress);
+            console.log(mainaddress);
+            console.log(phone);
+            console.log(reciever);
+            if (reciever == null || detailaddress == null || !(/^1[3456789]\d{9}$/.test(phone)) || mainaddress == null) {
+                alert("请填写完整信息");
+            } else {
+                var adata = {
+                    "reciever": reciever,
+                    "phone": phone,
+                    "mainaddress": mainaddress,
+                    "detailaddress": detailaddress
+                }
+                console.log(username);
+                var data = JSON.stringify(adata);
+                $.ajax({
+                    type: "POST",
+                    url: "address/addAddress/" + base.encode(username),
+                    contentType: "application/json",
+                    data: data,
+                    success: function (res) {
+                        console.log(res.result);
+                        if (res.result == "success") {
+                            $("#saveaddressmodal").modal("hide");
+                            var addr = res.useraddress;
+                            addrid = addr.id;
+                            $("#newaddrshow").append("收件人:  " + addr.reciever + " 联系电话: " + addr.phone + " 地址:  " + addr.mainaddress + " " + addr.detailaddress)
+                        } else {
+                            alert("地址存储失败")
+                        }
+                    }
+                })
+            }
+        })
+    })
+
+
+    $("#radioCustom2").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "address/showAddress/" + base.encode(username),
+            dataType: "json",
+            success: function (res) {
+                console.log(res);
+                $("#address").empty();
+                for (var i = 0; i < res.length; i++) {
+                    $("#address").append(
+                        "<option id='" + res[i].id + "'>收件人:    " + res[i].reciever + " 联系电话:   " + res[i].phone + " 地址:    " + res[i].mainaddress + " " + res[i].detailaddress + "</option>"
+                    );
+                }
+            }
+        })
+    })
+
+    $("#address").change(function () {
+        addrid = $("#address").find("option:checked").attr("id");
+    })
+
+    $("button[name='postbtn']").click(function () {
+            console.log(username)
+            console.log(addrid)
+        }
+    )
+
 })

@@ -104,7 +104,6 @@ public class UserController {
         Map map = new HashMap();
         String email = request.getParameter("emailcode");
         String emailcode = email;//md5加密
-        System.out.println(emailcode);
         List<User> user = us.findByEmail(emailcode);
         if (user.size() > 0) {
             map.put("result","false");
@@ -219,11 +218,8 @@ public class UserController {
         //添加 Cookie
         String loginUsername = request.getParameter("username");
         String loginPassword = request.getParameter("password");
-//        us.addCookie(loginUsername, response, request);
         User user = us.findByUserNameAndPassword(loginUsername, md5.StringInMd5(loginPassword));
         if (user != null) {
-//            Map rsmap = ts.operateToKen(user,user.getId());
-//            System.out.println(rsmap);
             us.addCookie(loginUsername, response, request);
             map.put("result", "index.html");
         } else {
@@ -297,7 +293,6 @@ public class UserController {
         Map map = new HashMap();
         List<User> users = us.findByUserName(username);
         User user = users.get(0);
-        System.out.println("-----" + user.getBeinvitedcode());
         if ("".equals(user.getBeinvitedcode())) {
             user.setBeinvitedcode(beinvitedcode);
             if (us.save(user) != null) {

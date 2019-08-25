@@ -134,20 +134,19 @@ $(document).ready(function () {
     })
 
     $("#waitpayid").click(function () {
+        $("#chossen").text("待付款");
         document.getElementById("tableid").removeAttribute("hidden");
-
-        alert("待付款")
     })
     $("#waitpostid").click(function () {
+        $("#chossen").text("待发货");
         document.getElementById("tableid").removeAttribute("hidden");
-        alert("待发货")
     })
     $("#waitgetid").click(function () {
+        $("#chossen").text("待收货");
         document.getElementById("tableid").removeAttribute("hidden");
-        alert("收货")
     })
     $("#waitbackid").click(function () {
+        $("#chossen").text("退款");
         document.getElementById("tableid").removeAttribute("hidden");
-        alert("退款")
     })
 })
