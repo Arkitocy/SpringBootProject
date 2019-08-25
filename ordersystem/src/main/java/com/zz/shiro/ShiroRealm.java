@@ -1,6 +1,7 @@
 package com.zz.shiro;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -15,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zz.repository.UserRepository;
 import com.zz.entity.User;
-
+@Slf4j
 public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
@@ -36,8 +37,7 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String userName = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
-
-        System.out.println("用户" + userName + "认证-----ShiroRealm.doGetAuthenticationInfo");
+        log.info("userName"+userName);
         User user = (userRepository.findByUsername(userName)).get(0);
 
         if (user == null) {
