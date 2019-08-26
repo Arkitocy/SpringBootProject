@@ -327,14 +327,11 @@ public class UserController {
 
     @PostMapping("savecheap/{username}/{sum}")
     public synchronized void savechaep(@PathVariable("username") String username, @PathVariable("sum") String sum) {
-        System.out.println(username);
         String updateuserid = us.findByUserName(username).get(0).getId();
-        System.out.println(updateuserid);
         List<Map<String, Object>> listmap = us.findinviterbyid(updateuserid);
         String inviterid = (String) listmap.get(0).get("id");
         List<Map<String, Object>> listmap2 = us.findusercheap(inviterid);
         UserCheap userCheap = new UserCheap();
-        System.out.println("id********"+inviterid);
         userCheap.setUserid(inviterid);
         userCheap.setUpdateuserid(updateuserid);
         if (listmap2.size()>0) {
@@ -343,7 +340,6 @@ public class UserController {
             userCheap.setCheap(new BigDecimal(sum).multiply(new BigDecimal("0.1")));
         }
         userCheap.setUpdatedate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        System.out.println("id**222******"+userCheap.getUserid());
         us.save(userCheap);
     }
 
