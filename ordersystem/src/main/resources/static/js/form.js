@@ -102,7 +102,8 @@ $(document).ready(function () {
     var base = new Base64();
     var addrid = "";
     var username = "";
-
+    var payway = "";
+    var cheap = ""
     $.ajax({
         type: "POST",
         url: "getUser",
@@ -214,7 +215,24 @@ $(document).ready(function () {
     $("button[name='postbtn']").click(function () {
             console.log(username)
             console.log(addrid)
+            console.log(payway)
         }
     )
-
+    $("#radioCustom3").click(function () {
+        payway = "zfb";
+    })
+    $("#radioCustom4").click(function () {
+        payway = "wechat";
+    })
+    $("#radioCustom5").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "user/findusercheap/" + base.encode(username),
+            contentType: "application/json",
+            success: function (res) {
+                $("#checkcheap").text("你已有抵扣" + res.cheap + "元");
+                $("#checkcheap").val(res.cheap);
+            }
+        })
+    })
 })

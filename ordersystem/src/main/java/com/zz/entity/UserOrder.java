@@ -13,6 +13,9 @@ public class UserOrder {
     @Column(length = 100)
     private String id;
     private String userid;
+    private String productid;
+    private String num;
+    private String sum;
     private String sellerid;
     private String postid;
     private String addressid;

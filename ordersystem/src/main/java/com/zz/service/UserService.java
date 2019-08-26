@@ -2,6 +2,7 @@ package com.zz.service;
 
 
 import com.zz.entity.User;
+import com.zz.repository.DTODao;
 import com.zz.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ import java.util.Map;
 public class UserService {
     @Resource
     UserRepository ur;
+    @Resource
+    DTODao dd;
 
     public User save(User user) {
         return ur.save(user);
@@ -64,5 +67,9 @@ public class UserService {
             //加入Cookie到响应头
             response.addCookie(loginUsernameCookie);
         }
+    }
+
+    public List<Map<String, Object>> findusercheap(String userid) {
+        return dd.findusercheap(userid);
     }
 }

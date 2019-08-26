@@ -217,8 +217,7 @@ $(function () {
         var headimgid = "defaultheadimg.jpg";
         var beinvitedcode = $("#register-beinvitedcode").val();
         var checkbox = $("#register-agree").is(":checked");
-        console.log(checkbox)
-        if (username == "" || password == "" || email == "" || checkbox) {
+        if (username == "" || password == "" || email == "" || checkbox == false) {
             alert("请填写完整信息");
         } else {
             var adata = {

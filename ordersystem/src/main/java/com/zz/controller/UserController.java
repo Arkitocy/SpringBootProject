@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Slf4j
@@ -91,9 +92,9 @@ public class UserController {
         String name = request.getParameter("username");//md5加密
         List<User> user = us.findByUserName(name);
         if (user.size() > 0) {
-            map.put("result","false");
-        }else {
-            map.put("result","true");
+            map.put("result", "false");
+        } else {
+            map.put("result", "true");
         }
         return map;
     }
@@ -108,9 +109,9 @@ public class UserController {
         String emailcode = email;//md5加密
         List<User> user = us.findByEmail(emailcode);
         if (user.size() > 0) {
-            map.put("result","false");
-        }else {
-            map.put("result","true");
+            map.put("result", "false");
+        } else {
+            map.put("result", "true");
         }
         return map;
     }
@@ -308,5 +309,17 @@ public class UserController {
         return map;
     }
 
-
+    @PostMapping("findusercheap/{username}")
+    public Map findusercheap(@PathVariable("username") String username) {
+        Map map = new HashMap();
+        String userid = us.findByUserName(username).get(0).getId();
+        List<Map<String, Object>> listmap = us.findusercheap(userid);
+        for (int i = 0; i < listmap.size(); i++) {
+            map.put("userid", (String) listmap.get(i).get("userid"));
+            map.put("cheap", (BigDecimal) listmap.get(i).get("cheap"));
+            map.put("updatedate", (String) listmap.get(i).get("updatedate"));
+            map.put("updateuserid", (String) listmap.get(i).get("updateuserid"));
+        }
+        return map;
+    }
 }
