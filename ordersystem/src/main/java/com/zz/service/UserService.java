@@ -2,7 +2,9 @@ package com.zz.service;
 
 
 import com.zz.entity.User;
+import com.zz.entity.UserCheap;
 import com.zz.repository.DTODao;
+import com.zz.repository.UserCheapRepository;
 import com.zz.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class UserService {
     UserRepository ur;
     @Resource
     DTODao dd;
+    @Resource
+    UserCheapRepository ucr;
 
     public User save(User user) {
         return ur.save(user);
@@ -71,5 +75,13 @@ public class UserService {
 
     public List<Map<String, Object>> findusercheap(String userid) {
         return dd.findusercheap(userid);
+    }
+
+    public List<Map<String, Object>> findinviterbyid(String userid) {
+        return dd.findinviterbyid(userid);
+    }
+
+    public UserCheap save(UserCheap userCheap) {
+        return ucr.save(userCheap);
     }
 }

@@ -1,5 +1,6 @@
 package com.zz.repository;
 
+import com.zz.entity.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,13 @@ public class DTODao {
 
     public List<Map<String, Object>> findusercheap(String userid) {
         String sql = "select * from user_cheap where userid=?";
+        Object[] args = {userid};
+        int[] argTypes = {Types.VARCHAR};
+        return this.jdbcTemplate.queryForList(sql, args, argTypes);
+    }
+
+    public List<Map<String, Object>> findinviterbyid(String userid) {
+        String sql = "select * from user where invitecode in (select invitecode from user where id=?)";
         Object[] args = {userid};
         int[] argTypes = {Types.VARCHAR};
         return this.jdbcTemplate.queryForList(sql, args, argTypes);

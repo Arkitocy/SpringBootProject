@@ -302,7 +302,27 @@
                                     <form class="form-horizontal">
                                         <div class="form-group row" name="selectgoods">
                                             <div class="col-sm-9">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-bordered">
+                                                        <thead>
+                                                        <th></th>
+                                                        <th>商品名</th>
+                                                        <th>单价</th>
+                                                        <th>数量</th>
+                                                        </thead>
+                                                        <tbody id="showproduct">
+                                                        </tbody>
+                                                    </table>
 
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3"></div>
+                                                    <div class="col-sm-6">
+                                                        <ul class="pagination">
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-sm-3"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -360,9 +380,14 @@
                                     <form class="form-horizontal">
                                         <div class="form-group row" name="selectcheap">
                                             <div class="col-sm-9">
+                                                <div class="i-checks">
+                                                    <input id="radioCustom6" type="radio" value="choosecheap"
+                                                           name="a" class="radio-template">
+                                                    <label for="radioCustom4">否</label>
+                                                </div>
                                                 <div class="row">
                                                     <div class="col-md-3">
-                                                        <div class="i-checks" >
+                                                        <div class="i-checks">
                                                             <input id="radioCustom5" type="radio" value="choosecheap"
                                                                    name="a" class="radio-template">
                                                             <label for="radioCustom3">是</label>
@@ -370,15 +395,19 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <p id="checkcheap"
-                                                           class="align-content-end"></p>
+                                                    <div class="col-md-3">
+                                                        <h4 id="checkcheap"
+                                                            class="align-content-end"></h4>
                                                     </div>
                                                 </div>
-                                                <div class="i-checks">
-                                                    <input id="radioCustom6" type="radio" value="choosecheap"
-                                                           name="a" class="radio-template">
-                                                    <label for="radioCustom4">否</label>
+                                                <div class="row">
+                                                    <div class="col-md-6" hidden="hidden" id="cheap">
+                                                        <label for="usecheap"
+                                                               class="label-material">使用抵扣</label>
+                                                        <input id="usecheap" type="text"
+                                                               name="usecheap"
+                                                               required class="input-material">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -398,11 +427,11 @@
                             <div class="card">
                                 <div class="card-close">
                                     <div class="dropdown">
-                                        <p>1件商品,总商品金额 ￥298</p>
+                                        <p>总商品金额 ￥</p><p id="sum"></p>
 
                                     </div>
                                     <div class="dropdown">
-                                        <h4>应付总额￥298</h4>
+                                        <h4>应付总额￥</h4><h4 id="paysum"></h4>
 
                                     </div>
                                     <button type='button' name='postbtn' class='btn btn-info btn-sm'>提交订单</button>

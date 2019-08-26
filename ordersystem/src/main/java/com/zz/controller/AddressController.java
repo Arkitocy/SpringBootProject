@@ -47,6 +47,7 @@ public class AddressController {
         ua1.setDetailaddress(ua.getDetailaddress());
         if (as.save(ua1) != null) {
             map.put("result", "success");
+            map.put("useraddress",as.save(ua1));
         } else {
             map.put("result", "fail");
         }

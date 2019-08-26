@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -15,7 +16,8 @@ public class UserOrder {
     private String userid;
     private String productid;
     private String num;
-    private String sum;
+    private String cheap;
+    private BigDecimal sum;
     private String sellerid;
     private String postid;
     private String addressid;

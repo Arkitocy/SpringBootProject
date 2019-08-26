@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.zz.entity.Cookies;
 import com.zz.entity.User;
 import com.zz.entity.UserAddress;
+import com.zz.entity.UserCheap;
 import com.zz.service.AddressService;
 import com.zz.service.UserService;
 
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpSession;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -321,5 +323,35 @@ public class UserController {
             map.put("updateuserid", (String) listmap.get(i).get("updateuserid"));
         }
         return map;
+    }
+
+    @PostMapping("savecheap/{username}/{sum}")
+    public synchronized void savechaep(@PathVariable("username") String username, @PathVariable("sum") String sum) {
+        String updateuserid = us.findByUserName(username).get(0).getId();
+        List<Map<String, Object>> listmap = us.findinviterbyid(updateuserid);
+        String inviterid = (String) listmap.get(0).get("userid");
+        List<Map<String, Object>> listmap2 = us.findusercheap(inviterid);
+        UserCheap userCheap = new UserCheap();
+        userCheap.setUserid(inviterid);
+        userCheap.setUpdateuserid(updateuserid);
+        if (listmap2.size()>0) {
+            userCheap.setCheap(((BigDecimal) listmap2.get(0).get("cheap")).add(new BigDecimal(sum).multiply(new BigDecimal("0.1"))));
+        } else {
+            userCheap.setCheap(new BigDecimal(sum).multiply(new BigDecimal("0.1")));
+        }
+        userCheap.setUpdatedate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        us.save(userCheap);
+    }
+
+    @PostMapping("updatecheap/{username}/{cheap}")
+    public synchronized void updatechaep(@PathVariable("username") String username, @PathVariable("cheap") String cheap) {
+        String userid = us.findByUserName(username).get(0).getId();
+        List<Map<String, Object>> listmap = us.findusercheap(userid);
+        UserCheap userCheap = new UserCheap();
+        userCheap.setUserid((String) listmap.get(0).get("userid"));
+        userCheap.setUpdateuserid(userid);
+        userCheap.setUpdatedate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        userCheap.setCheap(((BigDecimal) listmap.get(0).get("cheap")).subtract(new BigDecimal(cheap)));
+        us.save(userCheap);
     }
 }

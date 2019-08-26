@@ -103,7 +103,12 @@ $(document).ready(function () {
     var addrid = "";
     var username = "";
     var payway = "";
-    var cheap = ""
+    var cheap = "";
+    var totalcheap = "";
+    var productid = "";
+    var productnum = "";
+    var productprice = "";
+    var sumprice = "";
     $.ajax({
         type: "POST",
         url: "getUser",
@@ -125,6 +130,137 @@ $(document).ready(function () {
             }
         }
     })
+
+    getproduct(0);
+
+    function getproduct(pagen) {
+        $.ajax({
+            type: "POST",
+            url: "product/showall/" + pagen,
+            dataType: "json",
+            success: function (jsonres) {
+                if (pagen <= jsonres.totalPages) {
+                    $("#showproduct").empty();
+                    for (var i = 0; i < jsonres.content.length; i++) {
+                        $("#showproduct").append("<tr>" + "<td>" +
+                            "<div class=\"i-checks\">" +
+                            "<input id='" + jsonres.content[i].id + "' type='checkbox' value='' name='productid'  type=\"radio\" class=\"radio-template\">" +
+                            "<label for='" + jsonres.content[i].id + "'></label>" +
+                            "</div>" +
+                            "</td>" +
+                            "<td>" + jsonres.content[i].name +
+                            "</td>" +
+                            "<td>" + +jsonres.content[i].price +
+                            "</td>" +
+                            "<td> <div class=\"bookNum\">\n" +
+                            "<a name=\"sub\"  id='sub" + i + "'href=\"javascript:void(0);\">-</a>" +
+                            " <input type=\"text\" value=\"1\" id='productnum" + i + "' name='a'>\n" +
+                            "<a name=\"add\" id='add" + i + "' href=\"javascript:void(0);\">+</a>" +
+                            "<div class=\"clear\"></div>\n" +
+                            " </div>" +
+                            "</td>" +
+                            "</tr>"
+                        )
+                    }
+                }
+                var pagenum = jsonres.totalPages;
+                $(".pagination").empty();
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="firstpage">首页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="previosepage">上一页</a></li>');
+                for (var j = 0; j < pagenum; j++) {
+                    $(".pagination").append('<li class="page-item" id="page' + j + '"><a class="page-link" href="#">' + (j + 1) + '</a></li>');
+                }
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="nextpage">下一页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="lastpage">尾页</a></li>');
+                $(".page-item").removeClass("active");
+                $("#page" + pagen).addClass("active");
+                $("#nextpage").click(function () {
+                    var pagenum1 = Number(pagen) + Number(1);
+                    if (pagen < pagenum - 1) {
+                        getproduct(pagenum1);
+                    }
+                });
+                $("#previosepage").click(function () {
+                    var pagenum2 = Number(pagen) - Number(1);
+                    if (pagen > 0) {
+                        getproduct(pagenum2);
+                    }
+                });
+                $("#lastpage").click(function () {
+                    console.log(1);
+                    getproduct(pagenum - 1);
+                });
+                $("#firstpage").click(function () {
+                    console.log(1);
+                    getproduct(0);
+                });
+
+
+                $(".page-item").click(function () {
+                    page = this.id.substr(4);
+                    getdata(page, type, finishTime);
+                });
+
+                $("#productnum").keypress(function (b) {
+                    var keyCode = b.keyCode ? b.keyCode : b.charCode;
+                    if (keyCode != 0 && (keyCode < 48 || keyCode > 57) && keyCode != 8 && keyCode != 37 && keyCode != 39) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }).keyup(function (e) {
+                    var keyCode = e.keyCode ? e.keyCode : e.charCode;
+                    console.log(keyCode);
+                    if (keyCode != 8) {
+                        var numVal = parseInt($("#productnum").val()) || 0;
+                        numVal = numVal < 1 ? 1 : numVal;
+                        $("#productnum").val(numVal);
+                        $("#productnum").text(numVal);
+                    }
+                }).blur(function () {
+                    var numVal = parseInt($("#productnum").val()) || 0;
+                    numVal = numVal < 1 ? 1 : numVal;
+                    $("#productnum").val(numVal);
+                    $("#productnum").text(numVal);
+
+                });
+
+                $("a[name='add']").click(function () {
+                    var t = "productnum" + this.id.slice(3, 4)
+                    var num = parseInt($("#" + t).val()) || 0;
+                    $("#" + t).val(num + 1);
+                    $("#" + t).text(num + 1);
+                    productnum = num + 1;
+
+                    getsumprice();
+
+                });
+
+                $("a[name='sub']").click(function () {
+                    var t = "productnum" + this.id.slice(3, 4)
+                    var num = parseInt($("#" + t).val()) || 0;
+                    num = num - 1;
+                    num = num < 1 ? 1 : num;
+                    $("#" + t).val(num);
+                    $("#" + t).text(num);
+                    productnum = num;
+                    getsumprice();
+
+                });
+
+                $("input[name='productid']").click(function () {
+                    productid = this.id;
+                    productnum = 1;
+                    console.log(productid)
+                    getsumprice();
+                })
+
+
+            }
+        })
+
+    }
+
 
     $("#logoutbtn").click(function () {
         $.ajax({
@@ -192,20 +328,28 @@ $(document).ready(function () {
 
 
     $("#radioCustom2").click(function () {
+
         $.ajax({
             type: "POST",
             url: "address/showAddress/" + base.encode(username),
             dataType: "json",
             success: function (res) {
+                addrid=res[0].id;
                 console.log(res);
                 $("#address").empty();
                 for (var i = 0; i < res.length; i++) {
                     $("#address").append(
-                        "<option id='" + res[i].id + "'>收件人:    " + res[i].reciever + " 联系电话:   " + res[i].phone + " 地址:    " + res[i].mainaddress + " " + res[i].detailaddress + "</option>"
+                        "<option name='addressname' id='" + res[i].id + "'>收件人:    " + res[i].reciever + " 联系电话:   " + res[i].phone + " 地址:    " + res[i].mainaddress + " " + res[i].detailaddress + "</option>"
                     );
                 }
+
+
             }
         })
+    })
+
+    $("option[name='addressname']").click(function () {
+        addrid = this.id;
     })
 
     $("#address").change(function () {
@@ -213,9 +357,51 @@ $(document).ready(function () {
     })
 
     $("button[name='postbtn']").click(function () {
+            getsumprice();
             console.log(username)
             console.log(addrid)
             console.log(payway)
+            console.log(cheap)
+            console.log(productid)
+            console.log(productnum)
+            console.log(sum)
+            if(addrid=="" || payway=="" ||productid==""||productnum==""){
+                alert("请填写完整订单")
+            }else {
+                var adata = {
+                    "addressid": addrid,
+                    "productid": productid,
+                    "num": productnum,
+                    "cheap": cheap,
+                    "sum": sumprice
+                }
+                var data = JSON.stringify(adata);
+                $.ajax({
+                    type: "POST",
+                    url: "order/save/" + base.encode(username),
+                    contentType: "application/json",
+                    data: data,
+                    success: function (saveres) {
+                        if (saveres != null) {
+                            $.ajax({
+                                type: "POST",
+                                url: "user/savecheap/" + base.encode(username) + "/" + saveres.sum,
+                                contentType: "application/json"
+                            })
+                            $.ajax({
+                                type: "POST",
+                                url: "user/updatecheap/" + base.encode(username) + "/" + saveres.cheap,
+                                contentType: "application/json"
+                            })
+                            self.location = "index.html"
+                        } else {
+                            alert("下单失败")
+                        }
+                    }
+                })
+            }
+
+
         }
     )
     $("#radioCustom3").click(function () {
@@ -230,9 +416,63 @@ $(document).ready(function () {
             url: "user/findusercheap/" + base.encode(username),
             contentType: "application/json",
             success: function (res) {
-                $("#checkcheap").text("你已有抵扣" + res.cheap + "元");
-                $("#checkcheap").val(res.cheap);
+                if(res.cheap==null){
+                    totalcheap = 0;
+                    $("#checkcheap").text("你已有抵扣0元");
+                    $("#checkcheap").val(0);
+                }else{
+                    totalcheap = res.cheap;
+                    $("#checkcheap").text("你已有抵扣" + res.cheap + "元");
+                    $("#checkcheap").val(res.cheap);
+                    $("#cheap").removeAttr("hidden");
+                }
+                getsumprice();
             }
         })
     })
+
+    $("#radioCustom6").click(function () {
+        cheap = "";
+        getsumprice();
+    })
+
+    $("#usecheap").change(function () {
+        if ($("#usecheap").val() > totalcheap) {
+            alert("抵扣金额不足")
+            $("#usecheap").val(0);
+            $("#usecheap").text("");
+        } else if (!/^[0-9]+(.[0-9]{2})?$/.test($("#usecheap").val())) {
+            alert("请输入正确金额");
+            $("#usecheap").val(0);
+            $("#usecheap").text("");
+        } else {
+            cheap = $("#usecheap").val();
+            getsumprice();
+        }
+
+    })
+
+    function getsumprice() {
+        $.ajax({
+            type: "POST",
+            url: "product/showbyid/" + productid,
+            dataType: "json",
+            success: function (res1) {
+                productprice = res1.price;
+                console.log(productprice)
+            }
+        })
+        if (cheap > sumprice * productnum) {
+            alert("折扣过多")
+        } else {
+            $("#sum").text(productprice * productnum);
+            $("#sum").val(productprice * productnum);
+            sumprice = productprice * productnum - cheap
+            $("#paysum").val(sumprice);
+            $("#paysum").text(sumprice);
+        }
+
+
+    }
+
 })
