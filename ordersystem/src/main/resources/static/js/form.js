@@ -382,18 +382,20 @@ $(document).ready(function () {
                     contentType: "application/json",
                     data: data,
                     success: function (saveres) {
+                        console.log(saveres.sum)
+
                         if (saveres != null) {
                             $.ajax({
                                 type: "POST",
-                                url: "user/savecheap/" + base.encode(username) + "/" + saveres.sum,
-                                contentType: "application/json"
+                                url: "user/savecheap/" + base.encode(username) + "/" + saveres.sum
                             })
-                            $.ajax({
-                                type: "POST",
-                                url: "user/updatecheap/" + base.encode(username) + "/" + saveres.cheap,
-                                contentType: "application/json"
-                            })
-                            self.location = "index.html"
+                            if(saveres.cheap !=""){
+                                $.ajax({
+                                    type: "POST",
+                                    url: "user/updatecheap/" + base.encode(username) + "/" + saveres.cheap
+                                })
+                            }
+                            // self.location = "index.html"
                         } else {
                             alert("下单失败")
                         }

@@ -22,7 +22,7 @@ public class DTODao {
     }
 
     public List<Map<String, Object>> findinviterbyid(String userid) {
-        String sql = "select * from user where invitecode in (select invitecode from user where id=?)";
+        String sql = "select * from user LEFT JOIN user_cheap on(user.id=user_cheap.userid) where user.invitecode in (select beinvitedcode from user where id=?)";
         Object[] args = {userid};
         int[] argTypes = {Types.VARCHAR};
         return this.jdbcTemplate.queryForList(sql, args, argTypes);
