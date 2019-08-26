@@ -144,7 +144,7 @@ $(document).ready(function () {
                     for (var i = 0; i < jsonres.content.length; i++) {
                         $("#showproduct").append("<tr>" + "<td>" +
                             "<div class=\"i-checks\">" +
-                            "<input id='" + jsonres.content[i].id + "' type='checkbox' value='' name='productid'  type=\"radio\" class=\"radio-template\">" +
+                            "<input id='" + jsonres.content[i].id + "'  name='productid'  type=\"radio\" class=\"radio-template\">" +
                             "<label for='" + jsonres.content[i].id + "'></label>" +
                             "</div>" +
                             "</td>" +
@@ -395,7 +395,7 @@ $(document).ready(function () {
                                     url: "user/updatecheap/" + base.encode(username) + "/" + saveres.cheap
                                 })
                             }
-                            // self.location = "index.html"
+                            self.location = "index.html"
                         } else {
                             alert("下单失败")
                         }
