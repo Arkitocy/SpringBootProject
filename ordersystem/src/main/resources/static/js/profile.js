@@ -226,7 +226,7 @@ $(document).ready(function () {
 
                         $("button[name='deletebtn']").click(function () {
                             var id = this.id;
-                            $("#saveaddressmodal").modal("show");
+
                             console.log("****************" + id);
                             $.ajax({
                                 type: "POST",

@@ -197,8 +197,8 @@ $(document).ready(function () {
 
 
                 $(".page-item").click(function () {
-                    page = this.id.substr(4);
-                    getdata(page, type, finishTime);
+                    var page1 = this.id.substr(4);
+                    getproduct(page1);
                 });
 
                 $("#productnum").keypress(function (b) {

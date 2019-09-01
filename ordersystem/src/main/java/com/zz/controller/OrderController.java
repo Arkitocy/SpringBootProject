@@ -1,5 +1,6 @@
 package com.zz.controller;
 
+import com.zz.entity.Product;
 import com.zz.entity.User;
 import com.zz.entity.UserOrder;
 import com.zz.service.OrderService;
@@ -10,13 +11,16 @@ import com.zz.utils.Md5Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 @Api(value = "订单Controller")
 @RestController
@@ -57,5 +61,92 @@ public class OrderController {
         }
         return os.save(uo);
     }
+
+
+
+    @RequestMapping("orderPage/{username}/{status}/{page}")
+    public Page<Object[]> showOrder(@PathVariable("username") String  username,@PathVariable("status") String  status,@PathVariable("page") String  page){
+        List list = new ArrayList();
+        String userid = us.findByUserName(username).get(0).getId();
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), 10);
+        return os.showOrderPageByUseridAndStatus(userid,status,pageable);
+
+    }
+
+    @RequestMapping("cancelOrder/{id}")
+    public Map cancelOrder(@PathVariable("id") String id){
+        UserOrder order=os.findAllById(id);
+        Map map=new HashMap();
+        if(("待付款").equals(order.getStatus())){
+            order.setStatus("已取消");
+            UserOrder uo  = os.save(order);
+            System.out.println(uo.getStatus());
+            map.put("result","success");
+
+        }else{
+            map.put("result","fail");
+        }
+        return map;
+    }
+
+    @RequestMapping("pay/{id}")
+    public Map payOrder(@PathVariable("id") String id){
+        UserOrder order=os.findAllById(id);
+        Map map=new HashMap();
+        if(("待付款").equals(order.getStatus())){
+            order.setStatus("待发货");
+            UserOrder uo  = os.save(order);
+            System.out.println(uo.getStatus());
+            map.put("result","success");
+
+        }else{
+            map.put("result","fail");
+        }
+        return map;
+    }
+    @RequestMapping("refund/{id}")
+    public Map refundOrder(@PathVariable("id") String id){
+        UserOrder order=os.findAllById(id);
+        Map map=new HashMap();
+        if(("待发货").equals(order.getStatus())){
+            order.setStatus("退款");
+            UserOrder uo  = os.save(order);
+            System.out.println(uo.getStatus());
+            map.put("result","success");
+
+        }else{
+            map.put("result","fail");
+        }
+        return map;
+    }
+
+    @RequestMapping("confirmReceipt/{id}")
+    public Map connfirmOrder(@PathVariable("id") String id){
+        UserOrder order=os.findAllById(id);
+        Map map=new HashMap();
+        if(("待收货").equals(order.getStatus())){
+            order.setStatus("完成");
+            UserOrder uo  = os.save(order);
+            System.out.println(uo.getStatus());
+            map.put("result","success");
+
+        }else{
+            map.put("result","fail");
+        }
+        return map;
+    }
+
+    @RequestMapping("all/{username}/{page}")
+    public Page<Object[]> showAllOrder(@PathVariable("username") String  username,@PathVariable("page") String  page){
+        List list = new ArrayList();
+        String userid = us.findByUserName(username).get(0).getId();
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), 10);
+        return os.showOrderByUserid(userid,pageable);
+
+    }
+
+
+
+
 
 }

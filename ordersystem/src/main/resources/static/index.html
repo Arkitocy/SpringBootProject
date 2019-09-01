@@ -143,7 +143,21 @@
                 <div class="container-fluid">
                     <div class="row bg-white has-shadow">
                         <!-- Item -->
-                        <div class="col-xl-3 col-sm-6 " id="waitpayid">
+                        <div class="col-xl-2 col-sm-6 " id="allid">
+                            <div class="item d-flex align-items-center">
+                                <div class="icon bg-gray"><i class="icon-bill"></i></div>
+                                <div class="title"><span>全部订单</span>
+                                    <div class="progress">
+                                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="90"
+                                             aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"
+                                             id="all"></div>
+                                    </div>
+                                </div>
+                                <div class="number"><strong id="alnumd"></strong></div>
+                            </div>
+                        </div>
+                        <!-- Item -->
+                        <div class="col-xl-2 col-sm-6 " id="waitpayid">
                             <div class="item d-flex align-items-center">
                                 <div class="icon bg-violet"><i class="icon-bill"></i></div>
                                 <div class="title"><span>待付款</span>
@@ -157,7 +171,7 @@
                             </div>
                         </div>
                         <!-- Item -->
-                        <div class="col-xl-3 col-sm-6" id="waitpostid">
+                        <div class="col-xl-2 col-sm-6" id="waitpostid">
                             <div class="item d-flex align-items-center">
                                 <div class="icon bg-red"><i class="icon-padnote"></i></div>
                                 <div class="title"><span>待发货</span>
@@ -171,7 +185,7 @@
                             </div>
                         </div>
                         <!-- Item -->
-                        <div class="col-xl-3 col-sm-6" id="waitgetid">
+                        <div class="col-xl-2 col-sm-6" id="waitgetid">
                             <div class="item d-flex align-items-center">
                                 <div class="icon bg-green"><i class="icon-bill"></i></div>
                                 <div class="title"><span>待收货</span>
@@ -185,7 +199,21 @@
                             </div>
                         </div>
                         <!-- Item -->
-                        <div class="col-xl-3 col-sm-6" id="waitbackid">
+                        <div class="col-xl-2 col-sm-6" id="completeid">
+                            <div class="item d-flex align-items-center">
+                                <div class="icon bg-green"><i class="icon-padnote"></i></div>
+                                <div class="title"><span>完成</span>
+                                    <div class="progress">
+                                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="0"
+                                             aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"
+                                             id="completenumid"></div>
+                                    </div>
+                                </div>
+                                <div class="number"><strong id="completenum"></strong></div>
+                            </div>
+                        </div>
+                        <!-- Item -->
+                        <div class="col-xl-2 col-sm-6" id="waitbackid">
                             <div class="item d-flex align-items-center">
                                 <div class="icon bg-orange"><i class="icon-check"></i></div>
                                 <div class="title"><span>退款</span>
@@ -213,7 +241,7 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>订单</th>
+                                            <th>订单信息</th>
                                             <th>单价</th>
                                             <th>数量</th>
                                             <th>商品操作</th>
@@ -225,6 +253,15 @@
 
                                         </tbody>
                                     </table>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-6">
+                                        <ul class="pagination">
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-3"></div>
                                 </div>
                             </div>
                         </div>
