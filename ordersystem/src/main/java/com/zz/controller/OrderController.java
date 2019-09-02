@@ -37,7 +37,9 @@ public class OrderController {
     @PostMapping("save/{username}")
     public UserOrder save(@RequestBody UserOrder userOrder, @PathVariable("username") String username) {
         UserOrder uo = new UserOrder();
+        UserOrder uo1 = new UserOrder();
         User user = us.findByUserName(username).get(0);
+        Product product = ps.findAllById(userOrder.getProductid());
         uo.setId(Md5Util.StringInMd5(KeyUtils.genUniqueKey()));
         uo.setUserid(user.getId());
         System.out.println(userOrder.getAddressid());
@@ -48,18 +50,21 @@ public class OrderController {
         uo.setCheap(userOrder.getCheap());
         uo.setNum(userOrder.getNum());
         uo.setSum(userOrder.getSum());
-        if (userOrder.getPayid() != null) {
-            uo.setPayid(userOrder.getPayid());
-            uo.setPaytime(userOrder.getPaytime());
-            uo.setPostid("");
-            uo.setStatus("待发货");
-        } else {
-            uo.setPayid("");
-            uo.setPaytime("");
-            uo.setPostid("");
-            uo.setStatus("待付款");
+        if(Integer.parseInt(userOrder.getNum())<product.getNum()){
+            if (userOrder.getPayid() != null) {
+                uo.setPayid(userOrder.getPayid());
+                uo.setPaytime(userOrder.getPaytime());
+                uo.setPostid("");
+                uo.setStatus("待发货");
+            } else {
+                uo.setPayid("");
+                uo.setPaytime("");
+                uo.setPostid("");
+                uo.setStatus("待付款");
+            }
+            uo1=os.save(uo);
         }
-        return os.save(uo);
+        return uo1;
     }
 
 

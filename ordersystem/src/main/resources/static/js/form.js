@@ -201,29 +201,16 @@ $(document).ready(function () {
                     getproduct(page1);
                 });
 
-                $("#productnum").keypress(function (b) {
-                    var keyCode = b.keyCode ? b.keyCode : b.charCode;
-                    if (keyCode != 0 && (keyCode < 48 || keyCode > 57) && keyCode != 8 && keyCode != 37 && keyCode != 39) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }).keyup(function (e) {
-                    var keyCode = e.keyCode ? e.keyCode : e.charCode;
-                    console.log(keyCode);
-                    if (keyCode != 8) {
-                        var numVal = parseInt($("#productnum").val()) || 0;
-                        numVal = numVal < 1 ? 1 : numVal;
-                        $("#productnum").val(numVal);
-                        $("#productnum").text(numVal);
-                    }
-                }).blur(function () {
-                    var numVal = parseInt($("#productnum").val()) || 0;
-                    numVal = numVal < 1 ? 1 : numVal;
-                    $("#productnum").val(numVal);
-                    $("#productnum").text(numVal);
 
-                });
+                $("input[name='a']").blur(function () {
+
+                    var t = "productnum" + this.id.slice(10, 11)
+                    var num = parseInt($("#" + t).val()) || 0;
+                    $("#" + t).val(num);
+                    $("#" + t).text(num);
+                    productnum = num;
+                    getsumprice();
+                })
 
                 $("a[name='add']").click(function () {
                     var t = "productnum" + this.id.slice(3, 4)
@@ -334,7 +321,7 @@ $(document).ready(function () {
             url: "address/showAddress/" + base.encode(username),
             dataType: "json",
             success: function (res) {
-                addrid=res[0].id;
+                addrid = res[0].id;
                 console.log(res);
                 $("#address").empty();
                 for (var i = 0; i < res.length; i++) {
@@ -365,9 +352,9 @@ $(document).ready(function () {
             console.log(productid)
             console.log(productnum)
             console.log(sum)
-            if(addrid=="" || payway=="" ||productid==""||productnum==""){
+            if (addrid == "" || payway == "" || productid == "" || productnum == "") {
                 alert("请填写完整订单")
-            }else {
+            } else {
                 var adata = {
                     "addressid": addrid,
                     "productid": productid,
@@ -384,12 +371,12 @@ $(document).ready(function () {
                     success: function (saveres) {
                         console.log(saveres.sum)
 
-                        if (saveres != null) {
+                        if (saveres.id != null) {
                             $.ajax({
                                 type: "POST",
                                 url: "user/savecheap/" + base.encode(username) + "/" + saveres.sum
                             })
-                            if(saveres.cheap !=""){
+                            if (saveres.cheap != "") {
                                 $.ajax({
                                     type: "POST",
                                     url: "user/updatecheap/" + base.encode(username) + "/" + saveres.cheap
@@ -399,6 +386,9 @@ $(document).ready(function () {
                         } else {
                             alert("下单失败")
                         }
+                    },
+                    error: function () {
+                        alert("下单失败")
                     }
                 })
             }
@@ -418,11 +408,11 @@ $(document).ready(function () {
             url: "user/findusercheap/" + base.encode(username),
             contentType: "application/json",
             success: function (res) {
-                if(res.cheap==null){
+                if (res.cheap == null) {
                     totalcheap = 0;
                     $("#checkcheap").text("你已有抵扣0元");
                     $("#checkcheap").val(0);
-                }else{
+                } else {
                     totalcheap = res.cheap;
                     $("#checkcheap").text("你已有抵扣" + res.cheap + "元");
                     $("#checkcheap").val(res.cheap);
