@@ -36,19 +36,27 @@ public class OrderService {
     }
 
 
-    public Page<Object[]> showOrderPageByUseridAndStatus(String userid, String status, Pageable pageable){
-        return or.showOrderByStatusAndUserid(userid,status,pageable);
+    public Page<Object[]> showOrderPageByUseridAndStatus(String userid, String status, Pageable pageable) {
+        return or.showOrderByStatusAndUserid(userid, status, pageable);
     }
 
-    public Page<Object[]> showOrderByUserid(String userid, Pageable pageable){
-        return or.showOrderByUserid(userid,pageable);
+    public Page<Object[]> showOrderByUserid(String userid, Pageable pageable) {
+        return or.showOrderByUserid(userid, pageable);
     }
 
-    public UserOrder findAllById(String id){
+    public UserOrder findAllById(String id) {
         return or.findAllById(id);
     }
 
+    public Page<Object[]> showAllOrder(Pageable pageable) {
+        return or.showAllOrder(pageable);
+    }
 
-
+    public Page<Object[]> showOrderByStatus(String status, Pageable pageable) {
+        return or.showOrderByStatus(status, pageable);
+    }
+    public Page<Object[]> adminselectOrder(String perm,Pageable pageable){
+        return or.adminselectOrder(perm,pageable);
+    }
 
 }

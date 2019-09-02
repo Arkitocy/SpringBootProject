@@ -105,8 +105,8 @@ $(document).ready(function () {
         success: function (user) {
             username = base.decode(user.username);
             if (username != "") {
-                if(user.role=="用户"){
-                    self.location="index.html";
+                if (user.role == "用户") {
+                    self.location = "index.html";
                 }
                 $("#loginusername").text(username);
                 $.ajax({
@@ -123,6 +123,7 @@ $(document).ready(function () {
             }
         }
     })
+
 
     $("#logoutbtn").click(function () {
         $.ajax({
@@ -145,9 +146,9 @@ $(document).ready(function () {
     $("#waitpayid").click(function () {
         $("#chossen").text("待付款");
         document.getElementById("tableid").removeAttribute("hidden");
-        getstatus("待付款",0);
+        getstatus("待付款", 0);
         $("#alterbtn").append(
-        "<button type='button' class='btn btn-warning'>取消订单</button>"
+            "<button type='button' class='btn btn-warning'>取消订单</button>"
         )
 
 
@@ -155,25 +156,25 @@ $(document).ready(function () {
     $("#waitpostid").click(function () {
         $("#tbodyid").empty();
         $("#chossen").text("待发货");
-        getstatus("待发货",0);
+        getstatus("待发货", 0);
         document.getElementById("tableid").removeAttribute("hidden");
     })
     $("#waitgetid").click(function () {
         $("#tbodyid").empty();
         $("#chossen").text("待收货");
-        getstatus("待收货",0);
+        getstatus("待收货", 0);
         document.getElementById("tableid").removeAttribute("hidden");
     })
     $("#completeid").click(function () {
         $("#tbodyid").empty();
         $("#chossen").text("完成");
-        getstatus("完成",0);
+        getstatus("完成", 0);
         document.getElementById("tableid").removeAttribute("hidden");
     })
     $("#waitbackid").click(function () {
         $("#tbodyid").empty();
         $("#chossen").text("退款");
-        getstatus("退款",0);
+        getstatus("退款", 0);
         document.getElementById("tableid").removeAttribute("hidden");
     })
 
@@ -183,10 +184,10 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "order/all/" + base.encode(username)  + "/" + pagen,
+            url: "order/adminall/" + pagen,
             dataType: "json",
             success: function (res) {
-                console.log(res.content[0][0]);
+                console.log(res.content);
                 $("#tbodyid").empty();
                 for (var i = 0; i < res.content.length; i++) {
 
@@ -197,11 +198,11 @@ $(document).ready(function () {
                         + "</td>"
                         + "<td>" + res.content[i][2]
                         + "</td>"
-                        + "<td>"
-                        + "</td>"
                         + "<td>" + res.content[i][3]
                         + "</td>"
                         + "<td>" + res.content[i][4]
+                        + "</td>"
+                        + "<td>" + res.content[i][5]
                         + "</td></tr>"
                     );
 
@@ -246,172 +247,148 @@ $(document).ready(function () {
     }
 
 
-
-    function getstatus(status,pagen) {
+    function getstatus(status, pagen) {
         $(".pagination").empty();
 
-            $.ajax({
-                type: "POST",
-                url: "order/orderPage/" + base.encode(username)+"/"+status+"/"+pagen,
-                dataType: "json",
-                success: function (res) {
-                    console.log(res.content[0][0]);
-                    $("#tbodyid").empty();
-                    for (var i = 0; i < res.content.length; i++) {
+        $.ajax({
+            type: "POST",
+            url: "order/adminOrderPage/" + status + "/" + pagen,
+            dataType: "json",
+            success: function (res) {
+                console.log(res.content[0][0]);
+                $("#tbodyid").empty();
+                for (var i = 0; i < res.content.length; i++) {
 
-                        $("#tbodyid").append(
-                            "<tr><td>" + res.content[i][0]
-                            + "</td>"
-                            + "<td>" + res.content[i][1]
-                            + "</td>"
-                            + "<td>" + res.content[i][2]
-                            + "</td>"
-                            + "<td><button name='a' class='btn btn-danger' id='"+ res.content[i][5]+"'>取消订单</button><button name='b' class='btn btn-primary'  id='"+ res.content[i][5]+"'>付款</button><button name='c' class='btn btn-danger' id='"+ res.content[i][5]+"'>退款</button><button name='d' class='btn btn-danger' id='"+ res.content[i][5]+"'>确认收货 </button>"
-                            + "</td>"
-                            + "<td>" + res.content[i][3]
-                            + "</td>"
-                            + "<td>" + res.content[i][4]
-                            + "</td></tr>"
-                        );
+                    $("#tbodyid").append(
+                        "<tr><td>" + res.content[i][0]
+                        + "</td>"
+                        + "<td>" + res.content[i][1]
+                        + "</td>"
+                        + "<td>" + res.content[i][2]
+                        + "</td>"
+                        + "<td>" + res.content[i][3]
+                        + "</td>"
+                        + "<td>" + res.content[i][4]
+                        + "</td>"
+                        + "<td>" + res.content[i][5]
+                        + "</td></tr>"
+                    );
 
-                    }
-                    $("button[name='a']").click(function(){
-                        console.log(this.id);
-                        $.ajax({
-                            type: "POST",
-                            url: "order/cancelOrder/" + this.id,
-                            dataType: "json",
-                            success:function(res){
-                                if(res.result=="success"){
-                                    self.location="index.html"
-                                }else{
-                                    alert("取消失败")
-                                }
-                                console.log(res.result)
-                            }
-                        })
-
-
-                    })
-                    $("button[name='b']").click(function(){
-                        console.log(this.id);
-                        $.ajax({
-                            type: "POST",
-                            url: "order/pay/" + this.id,
-                            dataType: "json",
-                            success:function(res){
-                                if(res.result=="success"){
-                                    self.location="index.html"
-                                }else{
-                                    alert("付款失败")
-                                }
-                                console.log(res.result)
-                            }
-                        })
-                    })
-
-                    $("button[name='c']").click(function(){
-                        console.log(this.id);
-                        $.ajax({
-                            type: "POST",
-                            url: "order/refund/" + this.id,
-                            dataType: "json",
-                            success:function(res){
-                                if(res.result=="success"){
-                                    self.location="index.html"
-                                }else{
-                                    alert("退款失败")
-                                }
-                                console.log(res.result)
-                            }
-                        })
-                    })
-                    $("button[name='d']").click(function(){
-                        console.log(this.id);
-                        $.ajax({
-                            type: "POST",
-                            url: "order/confirmReceipt/" + this.id,
-                            dataType: "json",
-                            success:function(res){
-                                if(res.result=="success"){
-                                    self.location="index.html"
-                                }else{
-                                    alert("确认失败")
-                                }
-                                console.log(res.result)
-                            }
-                        })
-                    })
-
-
-                    if(status=="待付款"){
-                        $("button[name='c']").attr("style","display:none;");
-                        $("button[name='d']").attr("style","display:none;");
-                    }
-                    if(status=="待发货"){
-                        $("button[name='a']").attr("style","display:none;");
-                        $("button[name='b']").attr("style","display:none;");
-                        $("button[name='d']").attr("style","display:none;");
-                    }
-                    if(status=="待收货"){
-                        $("button[name='a']").attr("style","display:none;");
-                        $("button[name='b']").attr("style","display:none;");
-                        $("button[name='c']").attr("style","display:none;");
-                    }
-                    if(status=="退款"){
-                        $("button[name='a']").attr("style","display:none;");
-                        $("button[name='b']").attr("style","display:none;");
-                        $("button[name='c']").attr("style","display:none;");
-                        $("button[name='d']").attr("style","display:none;");
-                    }
-                    if(status=="完成"){
-                        $("button[name='a']").attr("style","display:none;");
-                        $("button[name='b']").attr("style","display:none;");
-                        $("button[name='c']").attr("style","display:none;");
-                        $("button[name='d']").attr("style","display:none;");
-                    }
-
-
-                    var pagenum = res.totalPages;
-                    $(".pagination").empty();
-                    $(".pagination").append('<li class="" ><a class="page-link" href="#" id="firstpage">首页</a></li>');
-                    $(".pagination").append('<li class="" ><a class="page-link" href="#" id="previosepage">上一页</a></li>');
-                    for (var j = 0; j < pagenum; j++) {
-                        $(".pagination").append('<li class="page-item" id="page' + j + '"><a class="page-link" href="#">' + (j + 1) + '</a></li>');
-                    }
-                    $(".pagination").append('<li class="" ><a class="page-link" href="#" id="nextpage">下一页</a></li>');
-                    $(".pagination").append('<li class="" ><a class="page-link" href="#" id="lastpage">尾页</a></li>');
-                    $(".page-item").removeClass("active");
-                    $("#page" + pagen).addClass("active");
-                    $("#nextpage").click(function () {
-                        var pagenum1 = Number(pagen) + Number(1);
-                        if (pagen < pagenum - 1) {
-                            getstatus(status,pagenum1);
-                        }
-                    });
-                    $("#previosepage").click(function () {
-                        var pagenum2 = Number(pagen) - Number(1);
-                        if (pagen > 0) {
-                            getstatus(status,pagenum2);
-                        }
-                    });
-                    $("#lastpage").click(function () {
-                        console.log(1);
-                        getstatus(status,pagenum - 1);
-                    });
-                    $("#firstpage").click(function () {
-                        console.log(1);
-                        getstatus(status,0);
-                    });
-                    $(".page-item").click(function () {
-                        var page1 = this.id.substr(4);
-                        getstatus(status,page1);
-                    });
                 }
-            })
+                var pagenum = res.totalPages;
+                $(".pagination").empty();
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="firstpage">首页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="previosepage">上一页</a></li>');
+                for (var j = 0; j < pagenum; j++) {
+                    $(".pagination").append('<li class="page-item" id="page' + j + '"><a class="page-link" href="#">' + (j + 1) + '</a></li>');
+                }
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="nextpage">下一页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="lastpage">尾页</a></li>');
+                $(".page-item").removeClass("active");
+                $("#page" + pagen).addClass("active");
+                $("#nextpage").click(function () {
+                    var pagenum1 = Number(pagen) + Number(1);
+                    if (pagen < pagenum - 1) {
+                        getstatus(status, pagenum1);
+                    }
+                });
+                $("#previosepage").click(function () {
+                    var pagenum2 = Number(pagen) - Number(1);
+                    if (pagen > 0) {
+                        getstatus(status, pagenum2);
+                    }
+                });
+                $("#lastpage").click(function () {
+                    console.log(1);
+                    getstatus(status, pagenum - 1);
+                });
+                $("#firstpage").click(function () {
+                    console.log(1);
+                    getstatus(status, 0);
+                });
+                $(".page-item").click(function () {
+                    var page1 = this.id.substr(4);
+                    getstatus(status, page1);
+                });
+            }
+        })
     }
 
+
+    function selectOrder(pagen){
+        $(".pagination").empty();
+        $.ajax({
+            type: "POST",
+            url: "order/adminSelectOrder/"+$("#selectname").val() +"/"+ pagen,
+            dataType: "json",
+            success: function (res) {
+                console.log(res.content);
+                $("#tbodyid").empty();
+                for (var i = 0; i < res.content.length; i++) {
+
+                    $("#tbodyid").append(
+                        "<tr><td>" + res.content[i][0]
+                        + "</td>"
+                        + "<td>" + res.content[i][1]
+                        + "</td>"
+                        + "<td>" + res.content[i][2]
+                        + "</td>"
+                        + "<td>" + res.content[i][3]
+                        + "</td>"
+                        + "<td>" + res.content[i][4]
+                        + "</td>"
+                        + "<td>" + res.content[i][5]
+                        + "</td></tr>"
+                    );
+                }
+                var pagenum = res.totalPages;
+                $(".pagination").empty();
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="firstpage">首页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="previosepage">上一页</a></li>');
+                for (var j = 0; j < pagenum; j++) {
+                    $(".pagination").append('<li class="page-item" id="page' + j + '"><a class="page-link" href="#">' + (j + 1) + '</a></li>');
+                }
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="nextpage">下一页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="lastpage">尾页</a></li>');
+                $(".page-item").removeClass("active");
+                $("#page" + pagen).addClass("active");
+                $("#nextpage").click(function () {
+                    var pagenum1 = Number(pagen) + Number(1);
+                    if (pagen < pagenum - 1) {
+                        selectOrder(pagenum1);
+                    }
+                });
+                $("#previosepage").click(function () {
+                    var pagenum2 = Number(pagen) - Number(1);
+                    if (pagen > 0) {
+                        selectOrder(pagenum2);
+                    }
+                });
+                $("#lastpage").click(function () {
+                    console.log(1);
+                    selectOrder(pagenum - 1);
+                });
+                $("#firstpage").click(function () {
+                    console.log(1);
+                    selectOrder(0);
+                });
+                $(".page-item").click(function () {
+                    var page1 = this.id.substr(4);
+                    selectOrder(page1);
+                });
+            }
+        })
+    }
+
+    $("#selectbtn").click(function () {
+        selectOrder(0);
     })
+
+    $("#selectbtn2").click(function () {
+        $("#selectname").text("");
+        $("#selectname").val("");
+    })
+})
 
 
 

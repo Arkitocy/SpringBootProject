@@ -26,7 +26,20 @@ public interface OrderRepository extends JpaRepository<UserOrder, String> {
     Page<Object[]> showOrderByUserid(String userid,Pageable pageable);
 
 
+    @Query(value="select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.status like CONCAT('%',?1,'%')",
+            nativeQuery = true)
+    Page<Object[]> showOrderByStatus(String status,Pageable pageable);
+
+    @Query(value="select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) ",
+            nativeQuery = true)
+    Page<Object[]> showAllOrder(Pageable pageable);
+
+    @Query(value="select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where  user_order.userid=?1 or product.name=?1",
+            nativeQuery = true)
+    Page<Object[]> adminselectOrder(String parm,Pageable pageable);
+
     UserOrder findAllById(String id);
+
 
 
 
