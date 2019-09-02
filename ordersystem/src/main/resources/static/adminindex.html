@@ -110,7 +110,7 @@
             <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
             <ul class="list-unstyled">
                 <li class="active"><a href="index.html"> <i class="icon-home"></i>主页 </a></li>
-                <li><a href="forms.html"> <i class="icon-padnote"></i>订单 </a></li>
+                <li><a href="task.html"> <i class="icon-padnote"></i>待处理事项 </a></li>
             </ul>
         </nav>
         <div class="content-inner">
@@ -123,6 +123,19 @@
             <!-- Dashboard Counts Section-->
             <section class="dashboard-counts no-padding-bottom">
                 <div class="container-fluid">
+                    <form class="form-inline" >
+
+                        <div class="col-12 col-lg-11 col-md-11">
+
+                            查询: &nbsp&nbsp<input type="text" class="form-control" name="selectname" id="selectname">
+
+                            &nbsp&nbsp<button type="button" class="btn btn-outline-primary" id="selectbtn">查询</button>
+
+
+                            &nbsp&nbsp&nbsp&nbsp<button type="button" class="btn btn-outline-secondary" id="selectbtn2">取消查询</button>
+                        </div>
+
+                    </form>
                     <div class="row bg-white has-shadow">
                         <!-- Item -->
                         <div class="col-xl-2 col-sm-6 " id="allid">
@@ -198,7 +211,7 @@
                         <div class="col-xl-2 col-sm-6" id="waitbackid">
                             <div class="item d-flex align-items-center">
                                 <div class="icon bg-orange"><i class="icon-check"></i></div>
-                                <div class="title"><span>退款</span>
+                                <div class="title"><span>已退款</span>
                                     <div class="progress">
                                         <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="0"
                                              aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"
@@ -214,8 +227,9 @@
             </section>
 
             <section class="dashboard-counts no-padding-bottom">
+
                 <div class="container-fluid">
-                    <div class="row bg-white has-shadow" id="tableid" hidden="hidden">
+                    <div class="row bg-white has-shadow" id="tableid" >
                             <div class="card-body">
 
                                 <div class="table-responsive">
@@ -223,12 +237,12 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
+                                            <th>用户id</th>
                                             <th>订单信息</th>
                                             <th>单价</th>
                                             <th>数量</th>
                                             <th>实付款</th>
                                             <th>状态</th>
-                                            <th>商品操作</th>
                                         </tr>
                                         </thead>
                                         <tbody id="tbodyid">
@@ -263,6 +277,6 @@
 <script src="js/charts-home.js"></script>
 <!-- Main File-->
 <script src="js/front.js"></script>
-<script src="js/index.js"></script>
+<script src="js/index2.js"></script>
 </body>
 </html>

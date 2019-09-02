@@ -17,7 +17,7 @@ public interface OrderRepository extends JpaRepository<UserOrder, String> {
 
     void deleteByUseridAndId(String userid, String id);
 
-    @Query(value="select product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.userid= ?1 and user_order.status= ?2",
+    @Query(value="select product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.userid= ?1 and user_order.status like CONCAT('%',?2,'%') ",
             nativeQuery = true)
     Page<Object[]> showOrderByStatusAndUserid(String userid,String status,Pageable pageable);
 

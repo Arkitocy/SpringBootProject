@@ -57,6 +57,7 @@ public class UserController {
         user1.setHeadimgid(user.getHeadimgid());
         user1.setBeinvitedcode(user.getBeinvitedcode());
         user1.setInvitecode(md5.StringInMd5(KeyUtils.genUniqueKey() + user.getUsername()));
+        user1.setRole("用户");
         if (us.save(user1) != null) {
             return "success";
         } else {

@@ -25,7 +25,12 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-
+        //参数
+        //anon 无需认证
+        //authc 需要认证
+        //user 如果使用rememberme可以直接访问
+        //perms 必须得到资源权限
+        //role 必须得到角色权限
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/fonts/**", "anon");
@@ -34,12 +39,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/data/**", "anon");
         filterChainDefinitionMap.put("/img/**", "anon");
         filterChainDefinitionMap.put("/druid/**", "anon");
-        filterChainDefinitionMap.put("/user/register", "anon");
-        filterChainDefinitionMap.put("/user/checkName", "anon");
-        filterChainDefinitionMap.put("/user/checkEmail", "anon");
-        filterChainDefinitionMap.put("/address/addAddress", "anon");
-        filterChainDefinitionMap.put("/address/showAddress", "anon");
-        filterChainDefinitionMap.put("/address/deleteAddress", "anon");
         filterChainDefinitionMap.put("/register.html", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/", "anon");
@@ -92,5 +91,7 @@ public class ShiroConfig {
         cookieRememberMeManager.setCipherKey(Base64.decode("3AvVhmFLUs0KTA3Kprsdag=="));
         return cookieRememberMeManager;
     }
+
+
 
 }

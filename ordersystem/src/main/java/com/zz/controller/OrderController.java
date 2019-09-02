@@ -109,9 +109,8 @@ public class OrderController {
         UserOrder order=os.findAllById(id);
         Map map=new HashMap();
         if(("待发货").equals(order.getStatus())){
-            order.setStatus("退款");
+            order.setStatus("待退款");
             UserOrder uo  = os.save(order);
-            System.out.println(uo.getStatus());
             map.put("result","success");
 
         }else{
@@ -127,7 +126,6 @@ public class OrderController {
         if(("待收货").equals(order.getStatus())){
             order.setStatus("完成");
             UserOrder uo  = os.save(order);
-            System.out.println(uo.getStatus());
             map.put("result","success");
 
         }else{

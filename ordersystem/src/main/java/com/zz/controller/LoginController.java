@@ -74,6 +74,7 @@ public class LoginController {
         Map map = new HashMap();
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         map.put("username",user.getUsername());
+        map.put("role",user.getRole());
 //        map.put("user")
         return map;
     }

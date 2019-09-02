@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Entity
 @Data
 public class User implements Serializable {
+    public static Long serialVersionUID = 12122321l;
     @Id
     @Column(length = 100)
     private String id;
@@ -19,6 +20,7 @@ public class User implements Serializable {
     private String headimgid;
     private String invitecode;
     private String beinvitedcode;
+    private String role;
 
     public User(String id, String username, String password, String email, String headimgid) {
         this.id = id;

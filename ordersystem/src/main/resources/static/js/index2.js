@@ -105,9 +105,8 @@ $(document).ready(function () {
         success: function (user) {
             username = base.decode(user.username);
             if (username != "") {
-                console.log(user.role);
-                if(user.role=="管理员"){
-                    self.location="adminindex.html";
+                if(user.role=="用户"){
+                    self.location="index.html";
                 }
                 $("#loginusername").text(username);
                 $.ajax({
@@ -198,6 +197,8 @@ $(document).ready(function () {
                         + "</td>"
                         + "<td>" + res.content[i][2]
                         + "</td>"
+                        + "<td>"
+                        + "</td>"
                         + "<td>" + res.content[i][3]
                         + "</td>"
                         + "<td>" + res.content[i][4]
@@ -265,12 +266,11 @@ $(document).ready(function () {
                             + "</td>"
                             + "<td>" + res.content[i][2]
                             + "</td>"
+                            + "<td><button name='a' class='btn btn-danger' id='"+ res.content[i][5]+"'>取消订单</button><button name='b' class='btn btn-primary'  id='"+ res.content[i][5]+"'>付款</button><button name='c' class='btn btn-danger' id='"+ res.content[i][5]+"'>退款</button><button name='d' class='btn btn-danger' id='"+ res.content[i][5]+"'>确认收货 </button>"
+                            + "</td>"
                             + "<td>" + res.content[i][3]
                             + "</td>"
                             + "<td>" + res.content[i][4]
-                            + "</td>"
-                            + "<td><button name='a' class='btn btn-danger' id='"+ res.content[i][5]+"'>取消订单</button><button name='b' class='btn btn-primary'  id='"+ res.content[i][5]+"'>付款</button><button name='c' class='btn btn-danger' id='"+ res.content[i][5]+"'>退款</button><button name='d' class='btn btn-danger' id='"+ res.content[i][5]+"'>确认收货 </button>"
-                            + "</td>"
                             + "</td></tr>"
                         );
 

@@ -109,8 +109,8 @@
             </div>
             <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
             <ul class="list-unstyled">
-                <li class="active"><a href="index.html"> <i class="icon-home"></i>主页 </a></li>
-                <li><a href="forms.html"> <i class="icon-padnote"></i>订单 </a></li>
+                <li ><a href="adminindex.html"> <i class="icon-home"></i>主页 </a></li>
+                <li class="active"><a href="task.html"> <i class="icon-padnote"></i>待处理事项 </a></li>
             </ul>
         </nav>
         <div class="content-inner">
@@ -121,133 +121,60 @@
                 </div>
             </header>
             <!-- Dashboard Counts Section-->
-            <section class="dashboard-counts no-padding-bottom">
-                <div class="container-fluid">
-                    <div class="row bg-white has-shadow">
-                        <!-- Item -->
-                        <div class="col-xl-2 col-sm-6 " id="allid">
-                            <div class="item d-flex align-items-center">
-                                <div class="icon bg-gray"><i class="icon-bill"></i></div>
-                                <div class="title"><span>全部订单</span>
-                                    <div class="progress">
-                                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="90"
-                                             aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"
-                                             id="all"></div>
-                                    </div>
-                                </div>
-                                <div class="number"><strong id="alnumd"></strong></div>
-                            </div>
-                        </div>
-                        <!-- Item -->
-                        <div class="col-xl-2 col-sm-6 " id="waitpayid">
-                            <div class="item d-flex align-items-center">
-                                <div class="icon bg-violet"><i class="icon-bill"></i></div>
-                                <div class="title"><span>待付款</span>
-                                    <div class="progress">
-                                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="90"
-                                             aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"
-                                             id="waitpaynumid"></div>
-                                    </div>
-                                </div>
-                                <div class="number"><strong id="waitpaynum"></strong></div>
-                            </div>
-                        </div>
-                        <!-- Item -->
-                        <div class="col-xl-2 col-sm-6" id="waitpostid">
-                            <div class="item d-flex align-items-center">
-                                <div class="icon bg-red"><i class="icon-padnote"></i></div>
-                                <div class="title"><span>待发货</span>
-                                    <div class="progress">
-                                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="0"
-                                             aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"
-                                             id="waitpostnumid"></div>
-                                    </div>
-                                </div>
-                                <div class="number"><strong id="waitpostnum"></strong></div>
-                            </div>
-                        </div>
-                        <!-- Item -->
-                        <div class="col-xl-2 col-sm-6" id="waitgetid">
-                            <div class="item d-flex align-items-center">
-                                <div class="icon bg-green"><i class="icon-bill"></i></div>
-                                <div class="title"><span>待收货</span>
-                                    <div class="progress">
-                                        <div role="progressbar" style="width: 40%; height: 4px;" aria-valuenow="0"
-                                             aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-green"
-                                             id="waitgetnumid"></div>
-                                    </div>
-                                </div>
-                                <div class="number"><strong id="waitgetnum"></strong></div>
-                            </div>
-                        </div>
-                        <!-- Item -->
-                        <div class="col-xl-2 col-sm-6" id="completeid">
-                            <div class="item d-flex align-items-center">
-                                <div class="icon bg-green"><i class="icon-padnote"></i></div>
-                                <div class="title"><span>完成</span>
-                                    <div class="progress">
-                                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="0"
-                                             aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"
-                                             id="completenumid"></div>
-                                    </div>
-                                </div>
-                                <div class="number"><strong id="completenum"></strong></div>
-                            </div>
-                        </div>
-                        <!-- Item -->
-                        <div class="col-xl-2 col-sm-6" id="waitbackid">
-                            <div class="item d-flex align-items-center">
-                                <div class="icon bg-orange"><i class="icon-check"></i></div>
-                                <div class="title"><span>退款</span>
-                                    <div class="progress">
-                                        <div role="progressbar" style="width: 50%; height: 4px;" aria-valuenow="0"
-                                             aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-orange"
-                                             id="waitbacknumid"></div>
-                                    </div>
-                                </div>
-                                <div class="number"><strong id="waitbacknum"></strong></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </section>
 
             <section class="dashboard-counts no-padding-bottom">
+
                 <div class="container-fluid">
-                    <div class="row bg-white has-shadow" id="tableid" hidden="hidden">
-                            <div class="card-body">
 
-                                <div class="table-responsive">
-                                    <h2 id="chossen"></h2>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>订单信息</th>
-                                            <th>单价</th>
-                                            <th>数量</th>
-                                            <th>实付款</th>
-                                            <th>状态</th>
-                                            <th>商品操作</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="tbodyid">
+                    <form class="form-inline" >
 
-                                        </tbody>
-                                    </table>
+                        <div class="col-12 col-lg-11 col-md-11">
+
+                            查询: &nbsp&nbsp<input type="text" class="form-control" name="selectname" id="selectname">
+
+                            &nbsp&nbsp<button type="button" class="btn btn-outline-primary" id="selectbtn">查询</button>
+
+
+                            &nbsp&nbsp&nbsp&nbsp<button type="button" class="btn btn-outline-secondary" id="selectbtn2">取消查询</button>
+                        </div>
+
+                    </form>
+                    <div class="row bg-white has-shadow" id="tableid">
+
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+                                <h2 id="chossen"></h2>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>用户id</th>
+                                        <th>订单信息</th>
+                                        <th>单价</th>
+                                        <th>数量</th>
+                                        <th>状态</th>
+                                        <th>确认</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbodyid">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    <ul class="pagination">
+                                    </ul>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-sm-3"></div>
-                                    <div class="col-sm-6">
-                                        <ul class="pagination">
-                                        </ul>
-                                    </div>
-                                    <div class="col-sm-3"></div>
-                                </div>
+                                <div class="col-sm-3"></div>
                             </div>
                         </div>
                     </div>
+                </div>
             </section>
             <!-- Page Footer-->
         </div>
@@ -263,6 +190,6 @@
 <script src="js/charts-home.js"></script>
 <!-- Main File-->
 <script src="js/front.js"></script>
-<script src="js/index.js"></script>
+<script src="js/task.js"></script>
 </body>
 </html>
