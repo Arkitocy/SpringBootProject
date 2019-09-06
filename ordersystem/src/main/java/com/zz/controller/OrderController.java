@@ -115,6 +115,7 @@ public class OrderController {
         Map map=new HashMap();
         if(("待发货").equals(order.getStatus())){
             order.setStatus("待退款");
+
             UserOrder uo  = os.save(order);
             map.put("result","success");
 
@@ -130,6 +131,7 @@ public class OrderController {
         Map map=new HashMap();
         if(("待收货").equals(order.getStatus())){
             order.setStatus("完成");
+            order.setCompletetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             UserOrder uo  = os.save(order);
             map.put("result","success");
 
@@ -160,10 +162,10 @@ public class OrderController {
         return os.showOrderByStatus(status,pageable);
     }
 
-    @RequestMapping("adminSelectOrder/{perm}/{page}")
-    public Page<Object[]> adminselectOrder(@PathVariable("perm") String  perm,@PathVariable("page") String  page){
+    @RequestMapping("adminSelectOrder/{perm}/{status}/{page}")
+    public Page<Object[]> adminselectOrder(@PathVariable("perm") String  perm,@PathVariable("status") String  status,@PathVariable("page") String  page){
         Pageable pageable = PageRequest.of(Integer.parseInt(page), 10);
-        return os.adminselectOrder(perm,pageable);
+        return os.adminselectOrder(perm,status,pageable);
     }
 
 

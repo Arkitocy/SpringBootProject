@@ -319,7 +319,7 @@ $(document).ready(function () {
         $(".pagination").empty();
         $.ajax({
             type: "POST",
-            url: "order/adminSelectOrder/"+$("#selectname").val() +"/"+ pagen,
+            url: "order/adminSelectOrder/"+$("#selectname").val() +"/"+$("#selectstatus").val()+"/"+ pagen,
             dataType: "json",
             success: function (res) {
                 console.log(res.content);
@@ -387,6 +387,9 @@ $(document).ready(function () {
     $("#selectbtn2").click(function () {
         $("#selectname").text("");
         $("#selectname").val("");
+        $("#selectstatus").val("全部")
+        $("#selectname").text("全部");
+
     })
 })
 

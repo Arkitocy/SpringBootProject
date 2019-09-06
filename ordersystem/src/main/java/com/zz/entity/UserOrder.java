@@ -25,6 +25,8 @@ public class UserOrder {
     private String payid;
     private String createtime;
     private String paytime;
+    private String completetime;
+
 
 
 }

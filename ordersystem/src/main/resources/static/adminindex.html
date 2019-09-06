@@ -123,16 +123,25 @@
             <!-- Dashboard Counts Section-->
             <section class="dashboard-counts no-padding-bottom">
                 <div class="container-fluid">
-                    <form class="form-inline" >
+                    <form class="form-inline">
 
                         <div class="col-12 col-lg-11 col-md-11">
 
                             查询: &nbsp&nbsp<input type="text" class="form-control" name="selectname" id="selectname">
+                            &nbsp&nbsp<select id="selectstatus" class="form-control">
+                            <option>全部</option>
+                            <option>待付款</option>
+                            <option>待发货</option>
+                            <option>完成</option>
+                            <option>退款</option>
+                        </select>
 
-                            &nbsp&nbsp<button type="button" class="btn btn-outline-primary" id="selectbtn">查询</button>
+                            &nbsp&nbsp
+                            <button type="button" class="btn btn-outline-primary" id="selectbtn">查询</button>
 
 
-                            &nbsp&nbsp&nbsp&nbsp<button type="button" class="btn btn-outline-secondary" id="selectbtn2">取消查询</button>
+                            &nbsp&nbsp&nbsp&nbsp
+                            <button type="button" class="btn btn-outline-secondary" id="selectbtn2">取消查询</button>
                         </div>
 
                     </form>
@@ -229,39 +238,39 @@
             <section class="dashboard-counts no-padding-bottom">
 
                 <div class="container-fluid">
-                    <div class="row bg-white has-shadow" id="tableid" >
-                            <div class="card-body">
+                    <div class="row bg-white has-shadow" id="tableid">
+                        <div class="card-body">
 
-                                <div class="table-responsive">
-                                    <h2 id="chossen"></h2>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>用户id</th>
-                                            <th>订单信息</th>
-                                            <th>单价</th>
-                                            <th>数量</th>
-                                            <th>实付款</th>
-                                            <th>状态</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="tbodyid">
+                            <div class="table-responsive">
+                                <h2 id="chossen"></h2>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>用户id</th>
+                                        <th>订单信息</th>
+                                        <th>单价</th>
+                                        <th>数量</th>
+                                        <th>实付款</th>
+                                        <th>状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbodyid">
 
-                                        </tbody>
-                                    </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    <ul class="pagination">
+                                    </ul>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-sm-3"></div>
-                                    <div class="col-sm-6">
-                                        <ul class="pagination">
-                                        </ul>
-                                    </div>
-                                    <div class="col-sm-3"></div>
-                                </div>
+                                <div class="col-sm-3"></div>
                             </div>
                         </div>
                     </div>
+                </div>
             </section>
             <!-- Page Footer-->
         </div>

@@ -55,8 +55,13 @@ public class OrderService {
     public Page<Object[]> showOrderByStatus(String status, Pageable pageable) {
         return or.showOrderByStatus(status, pageable);
     }
-    public Page<Object[]> adminselectOrder(String perm,Pageable pageable){
-        return or.adminselectOrder(perm,pageable);
+
+    public Page<Object[]> adminselectOrder(String perm, String status, Pageable pageable) {
+        if ("全部".equals(status)){
+            return or.adminselectOrder(perm,pageable);
+        }else {
+            return or.adminselectOrder(perm, status, pageable);
+        }
     }
 
 }

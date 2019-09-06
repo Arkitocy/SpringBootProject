@@ -17,33 +17,31 @@ public interface OrderRepository extends JpaRepository<UserOrder, String> {
 
     void deleteByUseridAndId(String userid, String id);
 
-    @Query(value="select product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.userid= ?1 and user_order.status like CONCAT('%',?2,'%') ",
+    @Query(value = "select product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.userid= ?1 and user_order.status like CONCAT('%',?2,'%') ",
             nativeQuery = true)
-    Page<Object[]> showOrderByStatusAndUserid(String userid,String status,Pageable pageable);
+    Page<Object[]> showOrderByStatusAndUserid(String userid, String status, Pageable pageable);
 
-    @Query(value="select product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.userid= ?1",
+    @Query(value = "select product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.userid= ?1",
             nativeQuery = true)
-    Page<Object[]> showOrderByUserid(String userid,Pageable pageable);
+    Page<Object[]> showOrderByUserid(String userid, Pageable pageable);
 
 
-    @Query(value="select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.status like CONCAT('%',?1,'%')",
+    @Query(value = "select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where user_order.status like CONCAT('%',?1,'%')",
             nativeQuery = true)
-    Page<Object[]> showOrderByStatus(String status,Pageable pageable);
+    Page<Object[]> showOrderByStatus(String status, Pageable pageable);
 
-    @Query(value="select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) ",
+    @Query(value = "select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) ",
             nativeQuery = true)
     Page<Object[]> showAllOrder(Pageable pageable);
 
-    @Query(value="select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where  user_order.userid=?1 or product.name=?1",
+    @Query(value = "select userid,name,price,num,sum,status,id FROM (select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where  user_order.userid=?1 or product.name=?1 ) AS a where status like CONCAT('%',?2,'%')", nativeQuery = true)
+    Page<Object[]> adminselectOrder(String parm, String status, Pageable pageable);
+
+    @Query(value = "select user_order.userid,product.name ,product.price ,user_order.num ,user_order.sum,user_order.status,user_order.id from ( user_order left join product on (user_order.productid=product.id)) where  user_order.userid=?1 or product.name=?1 ",
             nativeQuery = true)
-    Page<Object[]> adminselectOrder(String parm,Pageable pageable);
+    Page<Object[]> adminselectOrder(String parm, Pageable pageable);
 
     UserOrder findAllById(String id);
-
-
-
-
-
 
 
 }
