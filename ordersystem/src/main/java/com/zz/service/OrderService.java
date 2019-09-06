@@ -56,11 +56,19 @@ public class OrderService {
         return or.showOrderByStatus(status, pageable);
     }
 
-    public Page<Object[]> adminselectOrder(String perm, String status, Pageable pageable) {
-        if ("全部".equals(status)){
-            return or.adminselectOrder(perm,pageable);
+    public Page<Object[]> adminselectOrder(String perm, String status,String starttime,String finishtime,Pageable pageable) {
+        if(starttime.equals(finishtime)){
+            if ("全部".equals(status)){
+                return or.adminselectOrder(perm,pageable);
+            }else {
+                return or.adminselectOrder(perm, status, pageable);
+            }
         }else {
-            return or.adminselectOrder(perm, status, pageable);
+            if ("全部".equals(status)){
+                return or.adminselectOrder(perm,starttime,finishtime,pageable);
+            }else {
+                return or.adminselectOrder(perm, status,starttime,finishtime, pageable);
+            }
         }
     }
 

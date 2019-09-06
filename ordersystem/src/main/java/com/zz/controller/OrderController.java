@@ -162,10 +162,10 @@ public class OrderController {
         return os.showOrderByStatus(status,pageable);
     }
 
-    @RequestMapping("adminSelectOrder/{perm}/{status}/{page}")
-    public Page<Object[]> adminselectOrder(@PathVariable("perm") String  perm,@PathVariable("status") String  status,@PathVariable("page") String  page){
+    @RequestMapping("adminSelectOrder/{perm}/{status}/{starttime}/{finishtime}/{page}")
+    public Page<Object[]> adminselectOrder(@PathVariable("perm") String  perm,@PathVariable("status") String  status,@PathVariable("starttime") String  starttime,@PathVariable("finishtime") String  finishtime,@PathVariable("page") String  page){
         Pageable pageable = PageRequest.of(Integer.parseInt(page), 10);
-        return os.adminselectOrder(perm,status,pageable);
+        return os.adminselectOrder(perm,status,starttime,finishtime,pageable);
     }
 
 

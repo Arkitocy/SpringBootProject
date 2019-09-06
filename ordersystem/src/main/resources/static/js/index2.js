@@ -203,6 +203,12 @@ $(document).ready(function () {
                         + "<td>" + res.content[i][4]
                         + "</td>"
                         + "<td>" + res.content[i][5]
+                        + "</td>"
+                        + "<td>" + res.content[i][6]
+                        + "</td>"
+                        + "<td>" + res.content[i][7]
+                        + "</td>"
+                        + "<td>" + res.content[i][8]
                         + "</td></tr>"
                     );
 
@@ -271,6 +277,12 @@ $(document).ready(function () {
                         + "<td>" + res.content[i][4]
                         + "</td>"
                         + "<td>" + res.content[i][5]
+                        + "</td>"
+                        + "<td>" + res.content[i][6]
+                        + "</td>"
+                        + "<td>" + res.content[i][7]
+                        + "</td>"
+                        + "<td>" + res.content[i][8]
                         + "</td></tr>"
                     );
 
@@ -313,13 +325,28 @@ $(document).ready(function () {
             }
         })
     }
-
-
+    $("#searchfinishTime").val(getNowFormatDate())
+    $("#searchstartTime").val(getNowFormatDate())
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
     function selectOrder(pagen){
         $(".pagination").empty();
         $.ajax({
             type: "POST",
-            url: "order/adminSelectOrder/"+$("#selectname").val() +"/"+$("#selectstatus").val()+"/"+ pagen,
+            url: "order/adminSelectOrder/"+$("#selectname").val() +"/"+$("#selectstatus").val()+"/"+$("#searchstartTime").val()+"/"+$("#searchfinishTime").val()+"/"+ pagen,
             dataType: "json",
             success: function (res) {
                 console.log(res.content);
@@ -338,6 +365,12 @@ $(document).ready(function () {
                         + "<td>" + res.content[i][4]
                         + "</td>"
                         + "<td>" + res.content[i][5]
+                        + "</td>"
+                        + "<td>" + res.content[i][6]
+                        + "</td>"
+                        + "<td>" + res.content[i][7]
+                        + "</td>"
+                        + "<td>" + res.content[i][8]
                         + "</td></tr>"
                     );
                 }
