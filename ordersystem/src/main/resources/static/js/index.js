@@ -225,7 +225,7 @@ $(document).ready(function () {
                 $("#previosepage").click(function () {
                     var pagenum2 = Number(pagen) - Number(1);
                     if (pagen > 0) {
-                        getall(pagenum2);
+                          (pagenum2);
                     }
                 });
                 $("#lastpage").click(function () {

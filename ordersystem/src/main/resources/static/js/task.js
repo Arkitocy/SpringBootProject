@@ -136,6 +136,188 @@ $(document).ready(function () {
         self.location = "profile.html";
     })
 
+    getRefund('待退款',0)
+
+    function getRefund(status,pagen) {
+        $(".pagination").empty();
+
+        $.ajax({
+            type: "POST",
+            url: "order/waitRefund/"+status+"/" + pagen,
+            dataType: "json",
+            success: function (res) {
+                console.log(res.content);
+                $("#tbodyid").empty();
+                for (var i = 0; i < res.content.length; i++) {
+
+                    $("#tbodyid").append(
+                        "<tr><td>" + res.content[i][0]
+                        + "</td>"
+                        + "<td>" + res.content[i][1]
+                        + "</td>"
+                        + "<td>" + res.content[i][2]
+                        + "</td>"
+                        + "<td>" + res.content[i][3]
+                        + "</td>"
+                        + "<td>" + res.content[i][4]
+                        + "</td>"
+                        + "<td><button name='confirmbtn' class='btn btn-danger' id='" + res.content[i][5] + "'>确认退款</button>"
+                        + "</td></tr>"
+                    );
+
+                }
+                $("button[name='confirmbtn']").click(function(){
+                    console.log(this.id);
+                    $.ajax({
+                        type: "POST",
+                        url: "order/confirmRefund/" + this.id,
+                        dataType: "json",
+                        success:function(res){
+                            if(res.result=="success"){
+                                self.location="task.html"
+                            }else{
+                                alert("确认失败")
+                            }
+                            console.log(res.result)
+                        }
+                    })
+                })
+                var pagenum = res.totalPages;
+                $(".pagination").empty();
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="firstpage">首页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="previosepage">上一页</a></li>');
+                for (var j = 0; j < pagenum; j++) {
+                    $(".pagination").append('<li class="page-item" id="page' + j + '"><a class="page-link" href="#">' + (j + 1) + '</a></li>');
+                }
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="nextpage">下一页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="lastpage">尾页</a></li>');
+                $(".page-item").removeClass("active");
+                $("#page" + pagen).addClass("active");
+                $("#nextpage").click(function () {
+                    var pagenum1 = Number(pagen) + Number(1);
+                    if (pagen < pagenum - 1) {
+                        getRefund(pagenum1);
+                    }
+                });
+                $("#previosepage").click(function () {
+                    var pagenum2 = Number(pagen) - Number(1);
+                    if (pagen > 0) {
+                        getRefund(pagenum2);
+                    }
+                });
+                $("#lastpage").click(function () {
+                    console.log(1);
+                    getRefund(pagenum - 1);
+                });
+                $("#firstpage").click(function () {
+                    console.log(1);
+                    getRefund(0);
+                });
+                $(".page-item").click(function () {
+                    var page1 = this.id.substr(4);
+                    getRefund(page1);
+                });
+            }
+
+        })
+
+
+
+    }
+    $("#selectbtn").click(function () {
+        selectRefundOrder("待退款",0);
+
+    })
+
+    $("#selectbtn2").click(function () {
+        $("#selectname").text("");
+        $("#selectname").val("");
+    })
+     
+    function selectRefundOrder(status,pagen){
+        $(".pagination").empty();
+        $.ajax({
+            type: "POST",
+            url: "order/refundSelectOrder/"+$("#selectname").val() +"/"+status+"/"+ pagen,
+            dataType: "json",
+            success: function (res) {
+                console.log(res.content);
+                $("#tbodyid").empty();
+                for (var i = 0; i < res.content.length; i++) {
+
+
+                    $("#tbodyid").append(
+                        "<tr><td>" + res.content[i][0]
+                        + "</td>"
+                        + "<td>" + res.content[i][1]
+                        + "</td>"
+                        + "<td>" + res.content[i][2]
+                        + "</td>"
+                        + "<td>" + res.content[i][3]
+                        + "</td>"
+                        + "<td>" + res.content[i][4]
+                        + "</td>"
+                        + "<td><button name='confirmbtn' class='btn btn-danger' id='" + res.content[i][5] + "'>确认退款</button>"
+                        + "</td></tr>"
+                    );
+                }
+                $("button[name='confirmbtn']").click(function(){
+                    console.log(this.id);
+                    $.ajax({
+                        type: "POST",
+                        url: "order/confirmRefund/" + this.id,
+                        dataType: "json",
+                        success:function(res){
+                            if(res.result=="success"){
+                                self.location="task.html"
+                            }else{
+                                alert("确认失败")
+                            }
+                            console.log(res.result)
+                        }
+                    })
+                })
+
+                var pagenum = res.totalPages;
+                $(".pagination").empty();
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="firstpage">首页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="previosepage">上一页</a></li>');
+                for (var j = 0; j < pagenum; j++) {
+                    $(".pagination").append('<li class="page-item" id="page' + j + '"><a class="page-link" href="#">' + (j + 1) + '</a></li>');
+                }
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="nextpage">下一页</a></li>');
+                $(".pagination").append('<li class="" ><a class="page-link" href="#" id="lastpage">尾页</a></li>');
+                $(".page-item").removeClass("active");
+                $("#page" + pagen).addClass("active");
+                $("#nextpage").click(function () {
+                    var pagenum1 = Number(pagen) + Number(1);
+                    if (pagen < pagenum - 1) {
+                        selectRefundOrder(pagenum1);
+                    }
+                });
+                $("#previosepage").click(function () {
+                    var pagenum2 = Number(pagen) - Number(1);
+                    if (pagen > 0) {
+                        selectRefundOrder(pagenum2);
+                    }
+                });
+                $("#lastpage").click(function () {
+                    console.log(1);
+                    selectRefundOrder(pagenum - 1);
+                });
+                $("#firstpage").click(function () {
+                    console.log(1);
+                    selectRefundOrder(0);
+                });
+                $(".page-item").click(function () {
+                    var page1 = this.id.substr(4);
+                    selectRefundOrder(page1);
+                });
+            }
+        })
+    }
+
+
 
 })
 

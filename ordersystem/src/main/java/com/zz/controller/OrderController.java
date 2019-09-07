@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.annotation.RequestScope;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -168,6 +169,32 @@ public class OrderController {
         return os.adminselectOrder(perm,status,starttime,finishtime,pageable);
     }
 
+    @RequestMapping("waitRefund/{status}/{page}")
+    public Page<Object[]> waitRefundByStatus(@PathVariable("status") String  status,@PathVariable("page") String  page){
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), 10);
+        return os.confirmRefundByStatus(status,pageable);
+    }
+
+    @RequestMapping("confirmRefund/{id}")
+    public Map connfirmRefund(@PathVariable("id") String id){
+        UserOrder order=os.findAllById(id);
+        Map map=new HashMap();
+        if(("待退款").equals(order.getStatus())){
+            order.setStatus("已退款");
+            UserOrder uo  = os.save(order);
+            map.put("result","success");
+
+        }else{
+            map.put("result","fail");
+        }
+        return map;
+    }
+
+    @RequestMapping("refundSelectOrder/{parm}/{status}/{page}")
+    public Page<Object[]> adminsRefundSelectOrder(@PathVariable("parm") String  parm,@PathVariable("status") String  status,@PathVariable("page") String  page){
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), 10);
+        return os.adminsRefundSelectOrder(parm,status,pageable);
+    }
 
 
 
