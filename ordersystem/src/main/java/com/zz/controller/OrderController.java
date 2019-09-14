@@ -190,10 +190,10 @@ public class OrderController {
         return map;
     }
 
-    @RequestMapping("refundSelectOrder/{parm}/{status}/{page}")
-    public Page<Object[]> adminsRefundSelectOrder(@PathVariable("parm") String  parm,@PathVariable("status") String  status,@PathVariable("page") String  page){
+    @RequestMapping("refundSelectOrder/{parm}/{status}/{starttime}/{finishtime}/{page}")
+    public Page<Object[]> adminsRefundSelectOrder(@PathVariable("parm") String  parm,@PathVariable("status") String  status,@PathVariable("starttime") String  starttime,@PathVariable("finishtime") String  finishtime,@PathVariable("page") String  page){
         Pageable pageable = PageRequest.of(Integer.parseInt(page), 10);
-        return os.adminsRefundSelectOrder(parm,status,pageable);
+        return os.adminsRefundSelectOrder(parm,status,starttime,finishtime,pageable);
     }
 
 

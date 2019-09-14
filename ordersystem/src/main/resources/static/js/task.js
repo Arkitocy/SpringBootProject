@@ -161,7 +161,11 @@ $(document).ready(function () {
                         + "</td>"
                         + "<td>" + res.content[i][4]
                         + "</td>"
-                        + "<td><button name='confirmbtn' class='btn btn-danger' id='" + res.content[i][5] + "'>确认退款</button>"
+                        + "<td>" + res.content[i][5]
+                        + "</td>"
+                        + "<td>" + res.content[i][6]
+                        + "</td>"
+                        + "<td><button name='confirmbtn' class='btn btn-danger' id='" + res.content[i][7] + "'>确认退款</button>"
                         + "</td></tr>"
                     );
 
@@ -238,7 +242,7 @@ $(document).ready(function () {
         $(".pagination").empty();
         $.ajax({
             type: "POST",
-            url: "order/refundSelectOrder/"+$("#selectname").val() +"/"+status+"/"+ pagen,
+            url: "order/refundSelectOrder/"+$("#selectname").val() +"/"+status+"/"+$("#searchstartTime").val()+"/"+$("#searchfinishTime").val()+"/"+ pagen,
             dataType: "json",
             success: function (res) {
                 console.log(res.content);
@@ -257,7 +261,11 @@ $(document).ready(function () {
                         + "</td>"
                         + "<td>" + res.content[i][4]
                         + "</td>"
-                        + "<td><button name='confirmbtn' class='btn btn-danger' id='" + res.content[i][5] + "'>确认退款</button>"
+                        + "<td>" + res.content[i][5]
+                        + "</td>"
+                        + "<td>" + res.content[i][6]
+                        + "</td>"
+                        + "<td><button name='confirmbtn' class='btn btn-danger' id='" + res.content[i][7] + "'>确认退款</button>"
                         + "</td></tr>"
                     );
                 }

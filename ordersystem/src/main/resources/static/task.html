@@ -131,14 +131,20 @@
                     <form class="form-inline" >
 
                         <div class="col-12 col-lg-11 col-md-11">
-
                             查询: &nbsp&nbsp<input type="text" class="form-control" name="selectname" id="selectname">
+                            &nbsp&nbsp
+                            起始：
+                            <input type="date" class="form-control" id="searchstartTime" name="searchstartTime">
+                            截止：
+                            <input type="date" class="form-control" id="searchfinishTime" name="searchfinishTime">
+                            <button type="button" class="btn btn-outline-primary" id="selectbtn">查询</button>
 
-                            &nbsp&nbsp<button type="button" class="btn btn-outline-primary" id="selectbtn">查询</button>
-
-
-                            &nbsp&nbsp&nbsp&nbsp<button type="button" class="btn btn-outline-secondary" id="selectbtn2">取消查询</button>
+                            &nbsp&nbsp&nbsp&nbsp
+                            <button type="button" class="btn btn-outline-secondary" id="selectbtn2">取消查询</button>
                         </div>
+
+
+
 
                     </form>
                     <div class="row bg-white has-shadow" id="tableid">
@@ -150,10 +156,12 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
+                                        <th>订单号</th>
                                         <th>用户id</th>
                                         <th>订单信息</th>
                                         <th>单价</th>
                                         <th>数量</th>
+                                        <th>下单时间</th>
                                         <th>状态</th>
                                         <th>确认</th>
                                     </tr>
